@@ -30,7 +30,7 @@ namespace CreditoAuto.Infraestructure.Services
                     int esFinTransaccion = await _vehiculoRepo.Actualizar(Vehiculo);
                     if (esFinTransaccion == 0)
                     {                        
-                        return Response<VehiculoDto>.Ok(new(), "Ocurrio un error al eliminar el Vehiculo");
+                        return Response<VehiculoDto>.Ok(new(), "Ocurrio un error al actualizar el Vehiculo");
                     }
                     else
                     {
@@ -102,24 +102,17 @@ namespace CreditoAuto.Infraestructure.Services
         {
             try
             {
-                Response<VehiculoDto>? VehiculoDto = await Consultar(placa);
-                if (!string.IsNullOrEmpty(VehiculoDto.Data.Placa))
+                Vehiculo vehiculo =  await _vehiculoRepo.Consultar(placa);
+                if(null != vehiculo &&  vehiculo.SolicitudCreditos.Count() > 0)
                 {
-                    Vehiculo Vehiculo = await _mapper.From(VehiculoDto.Data).AdaptToTypeAsync<Vehiculo>();
-                    int esFinTransaccion = await _vehiculoRepo.Eliminar(Vehiculo);
-                    if (esFinTransaccion == 0)
-                    {
-                        return Response<int>.Ok(esFinTransaccion, "Ocurrio un error al eliminar el Vehiculo");
-                    }
-                    else
-                    {
-                        return Response<int>.Ok(esFinTransaccion, "Vehiculo eliminado Correctamente");
-                    }
+                    return Response<int>.Error("No se puede eliminar el Vehiculo, posee una solicitud de credito asociada");
                 }
-                else
+                if(null == vehiculo)
                 {
-                    return Response<int>.Ok(0, VehiculoDto.Mensaje);
+                    return Response<int>.Ok(new(), "Vehiculo no encontrado");
                 }
+                int esFinTransaccion = await _vehiculoRepo.Eliminar(vehiculo);
+                return Response<int>.Ok(esFinTransaccion,"Vehiculo eliminado correctamente");
             }
             catch(Exception ex)
             {

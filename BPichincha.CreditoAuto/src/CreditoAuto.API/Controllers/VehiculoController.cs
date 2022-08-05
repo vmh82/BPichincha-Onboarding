@@ -48,10 +48,10 @@ namespace CreditoAuto.API.Controllers
         [Route("Eliminar")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-        public async Task<IActionResult> Eliminar(string identificacion)
+        public async Task<IActionResult> Eliminar(string placa)
         {
 
-            Response<int> response = await _VehiculoService.Eliminar(identificacion);
+            Response<int> response = await _VehiculoService.Eliminar(placa);
             return StatusCode((int)response.Status, response);
 
         }

@@ -43,7 +43,7 @@ namespace CreditoAuto.Repository
 
         public async Task<SolicitudCredito> ValidarSolicitudPorDia(SolicitudCredito solicitud)
         {
-            SolicitudCredito? solicitudCredito = await _context.SolicitudCreditos.Where(q => q.IdentificacionCliente.Equals(solicitud.IdentificacionCliente)
+            SolicitudCredito? solicitudCredito = await _context.SolicitudCreditos.AsNoTracking().Where(q => q.IdentificacionCliente.Equals(solicitud.IdentificacionCliente)
             && q.NumeroPuntoVenta.Equals(solicitud.NumeroPuntoVenta)
             && q.FechaSolicitud.Date == DateTime.Now.Date && q.Estado.Equals(1)).FirstOrDefaultAsync();
             return solicitudCredito;
@@ -51,7 +51,7 @@ namespace CreditoAuto.Repository
 
         public async Task<SolicitudCredito> ValidarReservaVehiculo(SolicitudCredito solicitud)
         {
-            SolicitudCredito? solicitudCredito = await _context.SolicitudCreditos.Where(q => q.Placa.Equals(solicitud.Placa) && q.Estado.Equals(1)).FirstOrDefaultAsync();
+            SolicitudCredito? solicitudCredito = await _context.SolicitudCreditos.AsNoTracking().Where(q => q.Placa.Equals(solicitud.Placa) && q.Estado.Equals(1)).FirstOrDefaultAsync();
             return solicitudCredito;
         }
     }

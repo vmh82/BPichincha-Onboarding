@@ -21,7 +21,7 @@ namespace CreditoAuto.Repository
 
         public async Task<Vehiculo> Consultar(string placa)
         {
-            Vehiculo? vehiculo = await _context.Vehiculos.Where(q => q.Placa.Equals(placa)).Include(q => q.Marca).FirstOrDefaultAsync();
+            Vehiculo? vehiculo = await _context.Vehiculos.AsNoTracking().Where(q => q.Placa.Equals(placa)).Include(q => q.Marca).Include(q=>q.SolicitudCreditos).FirstOrDefaultAsync();
             return vehiculo;
         }
 

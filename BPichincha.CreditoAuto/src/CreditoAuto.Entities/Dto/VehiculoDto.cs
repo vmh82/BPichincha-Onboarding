@@ -5,27 +5,20 @@ namespace CreditoAuto.Entities.Dto
 {
     public  class VehiculoDto
     {
-        [Required(ErrorMessage = "Identificacion Requerida")]
-        public string Identificacion { get; set; }
         [Required]
-        public string Nombres { get; set; }
+        public string Placa { get; set; }
         [Required]
-        public string Apellidos { get; set; }
-        public int? Edad { get; set; } 
+        public string Modelo { get; set; }
         [Required]
-        public string FechaNacimiento { get; set; }
+        public string NumeroChasis { get; set; }
         [Required]
-        public string Direccion { get; set; }
+        public int MarcaId { get; set; }
         [Required]
-        public string Telefono { get; set; }
+        public string Tipo { get; set; }
         [Required]
-        public string EstadoCivil { get; set; }
+        public decimal Cilindraje { get; set; }
         [Required]
-        public string IdentificacionConyugue { get; set; }
-        [Required]
-        public string NombreConyugue { get; set; }
-        [Required]
-        public string SujetoCredito { get; set; }
+        public decimal Avaluo { get; set; }
 
     }
 }

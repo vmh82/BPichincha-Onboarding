@@ -10,31 +10,20 @@ namespace CreditoAuto.Entities.Models
 {
     public class SolicitudCredito
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CreditoId { get; set; }
-        [Required]
-        public DateTime FechaElaboracion { get; set; }
-
-        [ForeignKey("Cliente")]
-        public string ClienteId { get; set; }
-        public Cliente Cliente { get; set; }
-
-        [ForeignKey("Patio")]
-        public int PatioId { get; set; }
-        public Patio Patio { get; set; }
-
-        [ForeignKey("Vehiculo")]
+        public int SolicitudId { get; set; }
+        public string IdentificacionCliente { get; set; }
+        public int NumeroPuntoVenta { get; set; }
         public string Placa { get; set; }
-        public Vehiculo Vehiculo { get; set; }
-
         public int MesesPlazo { get; set; }
-        public decimal Cuotas { get; set; }
+        public int Cuotas { get; set; }
         public decimal Entrada { get; set; }
-
-        [ForeignKey("Ejecutivo")]
-        public string EjecutivoId { get; set; }
-        public Ejecutivo Ejecutivo { get; set; }
-
+        public string IdentificacionEjecutivo { get; set; }
         public string Observacion { get; set; }
+        public int Estado { get; set; }
+        public DateTime FechaSolicitud { get; set; }
+        public virtual Cliente Cliente { get; set; }
+        public virtual Ejecutivo Ejecutivo { get; set; }
+        public virtual Patio Patio { get; set; }
+        public virtual Vehiculo Vehiculo { get; set; }
     }
 }

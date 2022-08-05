@@ -32,11 +32,16 @@ builder.Services.AddScoped<IPatioRepository, PatioRepository>();
 builder.Services.AddScoped<IMarcaRepository, MarcaRepository>();
 builder.Services.AddScoped<IVehiculoRepository, VehiculoRepository>();
 builder.Services.AddScoped<IAsignacionClienteRepository, AsignacionClienteRepository>();
+builder.Services.AddScoped<ISolicitudCreditoRepository, SolicitudCreditoRepository>();
+builder.Services.AddScoped<IEjecutivoRepository, EjecutivoRepository>();
+
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IPatioService, PatioService>();
 builder.Services.AddScoped<IMarcaService, MarcaService>();
 builder.Services.AddScoped<IAsignacionClienteService, AsignacionClienteService>();
 builder.Services.AddScoped<IVehiculoService, VehiculoService>();
+builder.Services.AddScoped<ISolicitudCreditoService, SolicitudCreditoService>();
+builder.Services.AddScoped<IEjecutivoService, EjecutivoService>();
 builder.Services.AddCors();
 builder.Services.AddControllers()
     .AddNewtonsoftJson(opt =>

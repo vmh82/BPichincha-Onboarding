@@ -20,6 +20,8 @@ namespace CreditoAuto.Repository.Context
         public virtual DbSet<Patio> Patios { get; set; } = null!;
         public virtual DbSet<Ejecutivo> Ejecutivos { get; set; } = null!;
         public virtual DbSet<Vehiculo> Vehiculos { get; set; } = null!;
+        public virtual DbSet<SolicitudCredito> SolicitudCreditos { get; set; } = null!;
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -269,6 +271,76 @@ namespace CreditoAuto.Repository.Context
                     .HasForeignKey(d => d.MarcaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Vehiculo_Marca");
+            });
+
+
+            modelBuilder.Entity<SolicitudCredito>(entity =>
+            {
+                entity.HasKey(e => e.SolicitudId);
+
+                entity.ToTable("SolicitudCredito");
+
+                entity.Property(e => e.SolicitudId).HasColumnName("SolicitudId");
+
+                entity.Property(e => e.Cuotas).HasColumnName("Cuotas");
+
+                entity.Property(e => e.Entrada)
+                    .HasColumnType("money")
+                    .HasColumnName("Entrada");
+
+                entity.Property(e => e.Estado).HasColumnName("Estado");
+
+                entity.Property(e => e.IdentificacionCliente)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("IdentificacionCliente");
+
+                entity.Property(e => e.IdentificacionEjecutivo)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("IdentificacionEjecutivo");
+
+                entity.Property(e => e.MesesPlazo).HasColumnName("MesesPlazo");
+
+                entity.Property(e => e.Observacion)
+                    .IsUnicode(false)
+                    .HasColumnName("Observacion");
+
+                entity.Property(e => e.NumeroPuntoVenta).HasColumnName("NumeroPuntoVenta");
+
+                entity.Property(e => e.Placa).HasColumnName("Placa");
+
+                entity.Property(e => e.Estado).HasColumnName("Estado");
+
+                entity.Property(e => e.FechaSolicitud)
+                  .HasColumnType("datetime")
+                  .HasColumnName("FechaSolicitud");
+
+                entity.HasOne(d => d.Cliente)
+                    .WithMany(p => p.SolicitudCreditos)
+                    .HasForeignKey(d => d.IdentificacionCliente)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SolicitudCredito_Cliente");
+
+                entity.HasOne(d => d.Ejecutivo)
+                    .WithMany(p => p.SolicitudCreditos)
+                    .HasForeignKey(d => d.IdentificacionEjecutivo)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SolicitudCredito_Ejecutivo");
+
+                entity.HasOne(d => d.Patio)
+                    .WithMany(p => p.SolicitudCreditos)
+                    .HasForeignKey(d => d.NumeroPuntoVenta)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SolicitudCredito_Patio");
+
+                entity.HasOne(d => d.Vehiculo)
+                    .WithMany(p => p.SolicitudCreditos)
+                    .HasForeignKey(d => d.Placa)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SolicitudCredito_Vehiculo");
             });
         }
     }

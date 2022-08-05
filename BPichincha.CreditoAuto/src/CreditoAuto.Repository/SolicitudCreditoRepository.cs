@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CreditoAuto.Repository
 {
-    public class SolicitudCreditoRepository : IClienteRepository
+    public class SolicitudCreditoRepository : ISolicitudCreditoRepository
     {
         private readonly CreditoAutoDbContext _context;
         public SolicitudCreditoRepository(CreditoAutoDbContext context)
@@ -14,28 +14,39 @@ namespace CreditoAuto.Repository
             _context = context;
         }
 
-        public async Task<int> ActualizarCliente(Cliente cliente)
+        public async Task<int> Actualizar(SolicitudCredito solicitud)
         {
-            _context.Update(cliente);
+            _context.Update(solicitud);
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<Cliente> ConsultarCliente(string identificacion)
+        public async Task<SolicitudCredito> Consultar(string identificacion)
         {
-            Cliente? cliente = await _context.Clientes.AsNoTracking().Where(q => q.Identificacion.Equals(identificacion)).FirstOrDefaultAsync();
-            return cliente;
+            SolicitudCredito? solicitud = await _context.SolicitudCreditos.AsNoTracking().Where(q => q.IdentificacionCliente.Equals(identificacion)
+            && q.FechaSolicitud.Date == DateTime.Now.Date).FirstOrDefaultAsync();
+            return solicitud;
         }
 
-        public async Task<int> CrearCliente(Cliente cliente)
+        public async Task<int> Crear(SolicitudCredito solicitud)
         {
-           _context.Set<Cliente>().Add(cliente);
+            solicitud.FechaSolicitud = DateTime.Now;
+            solicitud.Estado = 1;
+           _context.Set<SolicitudCredito>().Add(solicitud);
            return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> EliminarCliente(Cliente cliente)
+        public async Task<int> Eliminar(SolicitudCredito solicitud)
         {
-            _context.Clientes.Remove(cliente);
+            _context.SolicitudCreditos.Remove(solicitud);
             return await _context.SaveChangesAsync();
+        }
+
+        public async Task<SolicitudCredito> ValidarSolicitudPorDia(SolicitudCredito solicitud)
+        {
+            SolicitudCredito? solicitudCredito = await _context.SolicitudCreditos.Where(q => q.IdentificacionCliente.Equals(solicitud.IdentificacionCliente)
+            && q.NumeroPuntoVenta.Equals(solicitud.NumeroPuntoVenta)
+            && q.FechaSolicitud.Date == DateTime.Now.Date && q.Estado.Equals(1)).FirstOrDefaultAsync();
+            return solicitudCredito;
         }
     }
 }

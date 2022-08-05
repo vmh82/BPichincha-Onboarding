@@ -23,8 +23,8 @@ namespace CreditoAuto.Infraestructure.Services
         {
             try
             {
-                Response<VehiculoDto>? VehiculoDto = await Consultar(VehiculoRequest.Identificacion);
-                if (!string.IsNullOrEmpty(VehiculoDto.Data.Identificacion))
+                Response<VehiculoDto>? VehiculoDto = await Consultar(VehiculoRequest.Placa);
+                if (!string.IsNullOrEmpty(VehiculoDto.Data.Placa))
                 {
                     Vehiculo Vehiculo = await _mapper.From(VehiculoRequest).AdaptToTypeAsync<Vehiculo>();
                     int esFinTransaccion = await _vehiculoRepo.Actualizar(Vehiculo);
@@ -34,7 +34,7 @@ namespace CreditoAuto.Infraestructure.Services
                     }
                     else
                     {
-                        VehiculoDto = await Consultar(VehiculoRequest.Identificacion);
+                        VehiculoDto = await Consultar(VehiculoRequest.Placa);
                         return Response<VehiculoDto>.Ok(VehiculoDto.Data, "Vehiculo actualizado Correctamente");
                     }
                 }
@@ -73,8 +73,8 @@ namespace CreditoAuto.Infraestructure.Services
         {
             try
             {
-                Response<VehiculoDto> VehiculoDto = await Consultar(vehiculoRequest.Identificacion);
-                if (string.IsNullOrEmpty(VehiculoDto.Data.Identificacion))
+                Response<VehiculoDto> VehiculoDto = await Consultar(vehiculoRequest.Placa);
+                if (string.IsNullOrEmpty(VehiculoDto.Data.Placa))
                 {
                     Vehiculo Vehiculo = await _mapper.From(vehiculoRequest).AdaptToTypeAsync<Vehiculo>();
                     int esFinTransaccion = await _vehiculoRepo.Crear(Vehiculo);
@@ -83,7 +83,7 @@ namespace CreditoAuto.Infraestructure.Services
                         _logger.LogWarning("Ocurrio un error al crear el Vehiculo", Vehiculo.Placa);
                         return Response<VehiculoDto>.Ok(new VehiculoDto(), "Ocurrio un error al crear el Vehiculo");
                     }
-                    VehiculoDto = await Consultar(vehiculoRequest.Identificacion);
+                    VehiculoDto = await Consultar(vehiculoRequest.Placa);
                     return Response<VehiculoDto>.Ok(VehiculoDto.Data, "Vehiculo Creado Correctamente");
                 }
                 else
@@ -103,7 +103,7 @@ namespace CreditoAuto.Infraestructure.Services
             try
             {
                 Response<VehiculoDto>? VehiculoDto = await Consultar(placa);
-                if (!string.IsNullOrEmpty(VehiculoDto.Data.Identificacion))
+                if (!string.IsNullOrEmpty(VehiculoDto.Data.Placa))
                 {
                     Vehiculo Vehiculo = await _mapper.From(VehiculoDto.Data).AdaptToTypeAsync<Vehiculo>();
                     int esFinTransaccion = await _vehiculoRepo.Eliminar(Vehiculo);

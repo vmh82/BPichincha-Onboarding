@@ -4,10 +4,9 @@ namespace CreditoAuto.Domain.Interfaces
 {
     public interface ISolicitudCreditoService
     {
-        Task<Response<SolicitudCreditoDto>> Consultar(int numeroSolicitud);
+        Task<Response<SolicitudCreditoDto>> Consultar(string identificacion);
         Task<Response<SolicitudCreditoDto>> Crear(SolicitudCreditoDto solicitudRequest);
-        Task<Response<int>> Eliminar(int numeroSolicitud);
-        Task<Response<SolicitudCreditoDto>> Actualizar(SolicitudCreditoDto solicitudRequest);
+        Task<Response<bool>> ValidarSolicitud(SolicitudCreditoDto solicitudRequest);
     }
 
 }

@@ -3,10 +3,12 @@ namespace CreditoAuto.Domain.Interfaces
 {
     public interface ISolicitudCreditoRepository
     {
-        Task<SolicitudCredito> Consultar(int numeroSolicitud);
-        Task<SolicitudCredito> Crear(SolicitudCredito solicitud);
-        Task<int> Eliminar(int numeroSolicitud);
-        Task<SolicitudCredito> Actualizar(SolicitudCredito solicitud);
+        Task<SolicitudCredito> Consultar(string identificacion);
+        Task<int> Crear(SolicitudCredito solicitud);
+        Task<int> Eliminar(SolicitudCredito solicitud);
+        Task<int> Actualizar(SolicitudCredito solicitud);
+
+        Task<SolicitudCredito> ValidarSolicitudPorDia(SolicitudCredito solicitud);
     }
 
 }

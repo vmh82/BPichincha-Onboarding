@@ -22,7 +22,7 @@ namespace CreditoAuto.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SolicitudCreditoDto))]
         public async Task<IActionResult> Consultar(string identificacion)
         {
-            Response<SolicitudCreditoDto> response = await _SolicitudCreditoService.Consultar(12);
+            Response<SolicitudCreditoDto> response = await _SolicitudCreditoService.Consultar(identificacion);
             return StatusCode((int)response.Status, response);
         }
 

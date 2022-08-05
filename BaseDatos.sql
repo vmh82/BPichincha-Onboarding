@@ -77,7 +77,7 @@ REFERENCES [dbo].[Patio] ([NumeroPuntoVenta ])
 GO
 ALTER TABLE [dbo].[AsignacionCliente] CHECK CONSTRAINT [FK_AsignacionCliente_Patio]
 GO
-CREATE TABLE [dbo].[Vehiculo](
+CREATE TABLE dbo.Vehiculo(
 	Placa varchar(8) NOT NULL,
 	Modelo varchar (50) NOT NULL,
 	NumeroChasis varchar(50) NOT NULL,
@@ -96,3 +96,41 @@ REFERENCES [dbo].[Marca] ([MarcaId])
 GO
 ALTER TABLE [dbo].[Vehiculo] CHECK CONSTRAINT [FK_Vehiculo_Marca]
 GO
+GO
+CREATE TABLE dbo.SolicitudCredito(
+	SolicitudId int IDENTITY(1,1) NOT NULL,
+	IdentificacionCliente varchar(10) NOT NULL,
+	NumeroPuntoVenta int NOT NULL,
+	Placa varchar(8) NOT NULL,
+	MesesPlazo int NOT NULL,
+	Cuotas int NOT NULL,
+	Entrada money NOT NULL,
+	IdentificacionEjecutivo varchar(10) NOT NULL,
+	Observacion varchar(256) NULL,
+	Estado int NOT NULL,
+ CONSTRAINT [PK_SolicitudCredito] PRIMARY KEY CLUSTERED 
+(
+	SolicitudId ASC
+))
+GO
+ALTER TABLE [dbo].[SolicitudCredito]  WITH CHECK ADD  CONSTRAINT [FK_SolicitudCredito_Cliente] FOREIGN KEY([IdentificacionCliente])
+REFERENCES dbo.Cliente (Identificacion)
+GO
+ALTER TABLE [dbo].[SolicitudCredito] CHECK CONSTRAINT [FK_SolicitudCredito_Cliente]
+GO
+ALTER TABLE [dbo].[SolicitudCredito]  WITH CHECK ADD  CONSTRAINT [FK_SolicitudCredito_Ejecutivo] FOREIGN KEY([IdentificacionEjecutivo])
+REFERENCES [dbo].[Ejecutivo] ([Identificacion])
+GO
+ALTER TABLE [dbo].[SolicitudCredito] CHECK CONSTRAINT [FK_SolicitudCredito_Ejecutivo]
+GO
+ALTER TABLE [dbo].[SolicitudCredito]  WITH CHECK ADD  CONSTRAINT [FK_SolicitudCredito_Patio] FOREIGN KEY([NumeroPuntoVenta])
+REFERENCES [dbo].[Patio] ([NumeroPuntoVenta])
+GO
+ALTER TABLE [dbo].[SolicitudCredito] CHECK CONSTRAINT [FK_SolicitudCredito_Patio]
+GO
+ALTER TABLE [dbo].[SolicitudCredito]  WITH CHECK ADD  CONSTRAINT [FK_SolicitudCredito_Vehiculo] FOREIGN KEY([Placa])
+REFERENCES [dbo].[Vehiculo] ([Placa])
+GO
+ALTER TABLE [dbo].[SolicitudCredito] CHECK CONSTRAINT [FK_SolicitudCredito_Vehiculo]
+GO
+

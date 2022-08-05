@@ -10,7 +10,10 @@ namespace CreditoAuto.Entities.Models
 {
     public class Ejecutivo
     {
-        [Key]
+        public Ejecutivo()
+        {
+            SolicitudCreditos = new HashSet<SolicitudCredito>();
+        }
         public string Identificacion { get; set; }
         public string Nombres { get; set; }
         public string Apellidos { get; set; }
@@ -20,5 +23,6 @@ namespace CreditoAuto.Entities.Models
         public int NumeroPuntoVenta { get; set; }
         public int Edad { get; set; }
         public virtual Patio Patio { get; set; }
+        public virtual ICollection<SolicitudCredito> SolicitudCreditos { get; set; }
     }
 }

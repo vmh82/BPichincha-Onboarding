@@ -14,6 +14,7 @@ namespace CreditoAuto.Entities.Models
         {
             AsignacionClientes = new HashSet<AsignacionCliente>();
             Ejecutivos = new HashSet<Ejecutivo>();
+            SolicitudCreditos = new HashSet<SolicitudCredito>();
             
         }
         public string Nombre { get; set; }
@@ -23,5 +24,6 @@ namespace CreditoAuto.Entities.Models
 
         public virtual ICollection<Ejecutivo> Ejecutivos { get; set; }
         public virtual ICollection<AsignacionCliente> AsignacionClientes { get; set; }
+        public virtual ICollection<SolicitudCredito> SolicitudCreditos { get; set; }
     }
 }

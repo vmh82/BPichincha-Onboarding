@@ -20,9 +20,9 @@ namespace CreditoAuto.API.Controllers
         [Route("Consultar")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(VehiculoDto))]
-        public async Task<IActionResult> Consultar(string identificacion)
+        public async Task<IActionResult> Consultar(string placa)
         {
-            Response<VehiculoDto> response = await _VehiculoService.Consultar(identificacion);
+            Response<VehiculoDto> response = await _VehiculoService.Consultar(placa);
             return StatusCode((int)response.Status, response);
         }
 

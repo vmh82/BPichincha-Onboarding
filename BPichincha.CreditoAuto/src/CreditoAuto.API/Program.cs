@@ -30,11 +30,13 @@ builder.Services.AddDbContext<CreditoAutoDbContext>(options =>
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IPatioRepository, PatioRepository>();
 builder.Services.AddScoped<IMarcaRepository, MarcaRepository>();
+builder.Services.AddScoped<IVehiculoRepository, VehiculoRepository>();
 builder.Services.AddScoped<IAsignacionClienteRepository, AsignacionClienteRepository>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IPatioService, PatioService>();
 builder.Services.AddScoped<IMarcaService, MarcaService>();
 builder.Services.AddScoped<IAsignacionClienteService, AsignacionClienteService>();
+builder.Services.AddScoped<IVehiculoService, VehiculoService>();
 builder.Services.AddCors();
 builder.Services.AddControllers()
     .AddNewtonsoftJson(opt =>

@@ -8,123 +8,123 @@ using Microsoft.Extensions.Logging;
 
 namespace CreditoAuto.Infraestructure.Services
 {
-    public class VehiculoService : IClienteService
+    public class VehiculoService : IVehiculoService
     {
-        private readonly IClienteRepository _clienteRepo;
+        private readonly IVehiculoRepository _vehiculoRepo;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
-        public VehiculoService(IMapper mapper, ILogger<ClienteService> logger,IClienteRepository clienteRepo)
+        public VehiculoService(IMapper mapper, ILogger<VehiculoService> logger, IVehiculoRepository vehiculoRepo)
         {
             _mapper = mapper;
             _logger = logger;
-            _clienteRepo = clienteRepo;
+            _vehiculoRepo = vehiculoRepo;
         }
-        public async Task<Response<ClienteDto>> ActualizarCliente(ClienteDto clienteRequest)
+        public async Task<Response<VehiculoDto>> Actualizar(VehiculoDto VehiculoRequest)
         {
             try
             {
-                Response<ClienteDto>? clienteDto = await ConsultarCliente(clienteRequest.Identificacion);
-                if (!string.IsNullOrEmpty(clienteDto.Data.Identificacion))
+                Response<VehiculoDto>? VehiculoDto = await Consultar(VehiculoRequest.Identificacion);
+                if (!string.IsNullOrEmpty(VehiculoDto.Data.Identificacion))
                 {
-                    Cliente cliente = await _mapper.From(clienteRequest).AdaptToTypeAsync<Cliente>();
-                    int esFinTransaccion = await _clienteRepo.ActualizarCliente(cliente);
+                    Vehiculo Vehiculo = await _mapper.From(VehiculoRequest).AdaptToTypeAsync<Vehiculo>();
+                    int esFinTransaccion = await _vehiculoRepo.Actualizar(Vehiculo);
                     if (esFinTransaccion == 0)
                     {                        
-                        return Response<ClienteDto>.Ok(new(), "Ocurrio un error al eliminar el cliente");
+                        return Response<VehiculoDto>.Ok(new(), "Ocurrio un error al eliminar el Vehiculo");
                     }
                     else
                     {
-                        clienteDto = await ConsultarCliente(clienteRequest.Identificacion);
-                        return Response<ClienteDto>.Ok(clienteDto.Data, "Cliente actualizado Correctamente");
+                        VehiculoDto = await Consultar(VehiculoRequest.Identificacion);
+                        return Response<VehiculoDto>.Ok(VehiculoDto.Data, "Vehiculo actualizado Correctamente");
                     }
                 }
                 else
                 {
-                    return Response<ClienteDto>.Ok(clienteDto.Data, clienteDto.Mensaje);
+                    return Response<VehiculoDto>.Ok(VehiculoDto.Data, VehiculoDto.Mensaje);
                 }
             }
             catch(Exception ex)
             {
                 _logger.LogError("Ocurrio un error de tipo {0}", ex);
-                return Response<ClienteDto>.Error("Ocurrio un error al actualizar el cliente");
+                return Response<VehiculoDto>.Error("Ocurrio un error al actualizar el Vehiculo");
             }
         }
 
-        public async Task<Response<ClienteDto>> ConsultarCliente(string identificacion)
+        public async Task<Response<VehiculoDto>> Consultar(string placa)
         {
             try
             {
-                Cliente cliente = await _clienteRepo.ConsultarCliente(identificacion);
-                if (null == cliente)
+                Vehiculo Vehiculo = await _vehiculoRepo.Consultar(placa);
+                if (null == Vehiculo)
                 {
-                    return Response<ClienteDto>.Ok(new(), "Cliente no encontrado");
+                    return Response<VehiculoDto>.Ok(new(), "Vehiculo no encontrado");
                 }
-                ClienteDto clienteDto = await _mapper.From(cliente).AdaptToTypeAsync<ClienteDto>();
-                return Response<ClienteDto>.Ok(clienteDto, "Transaccion procesada correctamente");
+                VehiculoDto VehiculoDto = await _mapper.From(Vehiculo).AdaptToTypeAsync<VehiculoDto>();
+                return Response<VehiculoDto>.Ok(VehiculoDto, "Transaccion procesada correctamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error de tipo {0}", ex);
-                 return Response<ClienteDto>.Error("Ocurrio un error al consultar el cliente");
+                 return Response<VehiculoDto>.Error("Ocurrio un error al consultar el Vehiculo");
             }
         }
 
-        public async Task<Response<ClienteDto>> CrearCliente(ClienteDto clienteRequest)
+        public async Task<Response<VehiculoDto>> Crear(VehiculoDto vehiculoRequest)
         {
             try
             {
-                Response<ClienteDto> clienteDto = await ConsultarCliente(clienteRequest.Identificacion);
-                if (string.IsNullOrEmpty(clienteDto.Data.Identificacion))
+                Response<VehiculoDto> VehiculoDto = await Consultar(vehiculoRequest.Identificacion);
+                if (string.IsNullOrEmpty(VehiculoDto.Data.Identificacion))
                 {
-                    Cliente cliente = await _mapper.From(clienteRequest).AdaptToTypeAsync<Cliente>();
-                    int esFinTransaccion = await _clienteRepo.CrearCliente(cliente);
+                    Vehiculo Vehiculo = await _mapper.From(vehiculoRequest).AdaptToTypeAsync<Vehiculo>();
+                    int esFinTransaccion = await _vehiculoRepo.Crear(Vehiculo);
                     if (esFinTransaccion == 0)
                     {
-                        _logger.LogWarning("Ocurrio un error al crear el cliente", cliente.Identificacion);
-                        return Response<ClienteDto>.Ok(new ClienteDto(), "Ocurrio un error al crear el cliente");
+                        _logger.LogWarning("Ocurrio un error al crear el Vehiculo", Vehiculo.Placa);
+                        return Response<VehiculoDto>.Ok(new VehiculoDto(), "Ocurrio un error al crear el Vehiculo");
                     }
-                    clienteDto = await ConsultarCliente(clienteRequest.Identificacion);
-                    return Response<ClienteDto>.Ok(clienteDto.Data, "Cliente Creado Correctamente");
+                    VehiculoDto = await Consultar(vehiculoRequest.Identificacion);
+                    return Response<VehiculoDto>.Ok(VehiculoDto.Data, "Vehiculo Creado Correctamente");
                 }
                 else
                 {
-                    return Response<ClienteDto>.Ok(new ClienteDto(), "El cliente ya se encuentra registrado");
+                    return Response<VehiculoDto>.Ok(new VehiculoDto(), "El Vehiculo ya se encuentra registrado");
                 }
             }
             catch(Exception ex)
             {
                 _logger.LogError("Ocurrio un error de tipo {0}", ex);
-                return Response<ClienteDto>.Error("Ocurrio un error al crear el cliente");
+                return Response<VehiculoDto>.Error("Ocurrio un error al crear el Vehiculo");
             }
         }
 
-        public async Task<Response<int>> EliminarCliente(string identificacion)
+        public async Task<Response<int>> Eliminar(string placa)
         {
             try
             {
-                Response<ClienteDto>? clienteDto = await ConsultarCliente(identificacion);
-                if (!string.IsNullOrEmpty(clienteDto.Data.Identificacion))
+                Response<VehiculoDto>? VehiculoDto = await Consultar(placa);
+                if (!string.IsNullOrEmpty(VehiculoDto.Data.Identificacion))
                 {
-                    Cliente cliente = await _mapper.From(clienteDto.Data).AdaptToTypeAsync<Cliente>();
-                    int esFinTransaccion = await _clienteRepo.EliminarCliente(cliente);
+                    Vehiculo Vehiculo = await _mapper.From(VehiculoDto.Data).AdaptToTypeAsync<Vehiculo>();
+                    int esFinTransaccion = await _vehiculoRepo.Eliminar(Vehiculo);
                     if (esFinTransaccion == 0)
                     {
-                        return Response<int>.Ok(esFinTransaccion, "Ocurrio un error al eliminar el cliente");
+                        return Response<int>.Ok(esFinTransaccion, "Ocurrio un error al eliminar el Vehiculo");
                     }
                     else
                     {
-                        return Response<int>.Ok(esFinTransaccion, "Cliente eliminado Correctamente");
+                        return Response<int>.Ok(esFinTransaccion, "Vehiculo eliminado Correctamente");
                     }
                 }
                 else
                 {
-                    return Response<int>.Ok(0, clienteDto.Mensaje);
+                    return Response<int>.Ok(0, VehiculoDto.Mensaje);
                 }
             }
             catch(Exception ex)
             {
                 _logger.LogError("Ocurrio un error de tipo {0}", ex);
-                return Response<int>.Error("Ocurrio un error al eliminar el cliente");
+                return Response<int>.Error("Ocurrio un error al eliminar el Vehiculo");
             }
         }
     }

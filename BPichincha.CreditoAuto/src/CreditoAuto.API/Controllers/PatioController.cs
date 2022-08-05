@@ -20,9 +20,9 @@ namespace CreditoAuto.API.Controllers
         [Route("Consultar")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatioDto))]
-        public async Task<IActionResult> Consultar(string identificacion)
+        public async Task<IActionResult> Consultar(int numeroPuntoVenta)
         {
-            Response<PatioDto> response = await _PatioService.Consultar(123);
+            Response<PatioDto> response = await _PatioService.Consultar(numeroPuntoVenta);
             return StatusCode((int)response.Status, response);
         }
 
@@ -48,10 +48,10 @@ namespace CreditoAuto.API.Controllers
         [Route("Eliminar")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-        public async Task<IActionResult> Eliminar(string identificacion)
+        public async Task<IActionResult> Eliminar(int numeroPuntoVenta)
         {
 
-            Response<int> response = await _PatioService.Eliminar(123);
+            Response<int> response = await _PatioService.Eliminar(numeroPuntoVenta);
             return StatusCode((int)response.Status, response);
 
         }

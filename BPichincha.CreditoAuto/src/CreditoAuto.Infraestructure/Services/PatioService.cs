@@ -8,123 +8,123 @@ using Microsoft.Extensions.Logging;
 
 namespace CreditoAuto.Infraestructure.Services
 {
-    public class PatioService : IClienteService
+    public class PatioService : IPatioService
     {
-        private readonly IClienteRepository _clienteRepo;
+        private readonly IPatioRepository _PatioRepo;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
-        public PatioService(IMapper mapper, ILogger<ClienteService> logger,IClienteRepository clienteRepo)
+        public PatioService(IMapper mapper, ILogger<PatioService> logger,IPatioRepository PatioRepo)
         {
             _mapper = mapper;
             _logger = logger;
-            _clienteRepo = clienteRepo;
+            _PatioRepo = PatioRepo;
         }
-        public async Task<Response<ClienteDto>> ActualizarCliente(ClienteDto clienteRequest)
+        public async Task<Response<PatioDto>> Actualizar(PatioDto PatioRequest)
         {
             try
             {
-                Response<ClienteDto>? clienteDto = await ConsultarCliente(clienteRequest.Identificacion);
-                if (!string.IsNullOrEmpty(clienteDto.Data.Identificacion))
+                Response<PatioDto>? PatioDto = await Consultar(PatioRequest.NumeroPuntoVenta);
+                if (!string.IsNullOrEmpty(PatioDto.Data.Nombre))
                 {
-                    Cliente cliente = await _mapper.From(clienteRequest).AdaptToTypeAsync<Cliente>();
-                    int esFinTransaccion = await _clienteRepo.ActualizarCliente(cliente);
+                    Patio Patio = await _mapper.From(PatioRequest).AdaptToTypeAsync<Patio>();
+                    int esFinTransaccion = await _PatioRepo.Actualizar(Patio);
                     if (esFinTransaccion == 0)
                     {                        
-                        return Response<ClienteDto>.Ok(new(), "Ocurrio un error al eliminar el cliente");
+                        return Response<PatioDto>.Ok(new(), "Ocurrio un error al eliminar el Patio");
                     }
                     else
                     {
-                        clienteDto = await ConsultarCliente(clienteRequest.Identificacion);
-                        return Response<ClienteDto>.Ok(clienteDto.Data, "Cliente actualizado Correctamente");
+                        PatioDto = await Consultar(PatioRequest.NumeroPuntoVenta);
+                        return Response<PatioDto>.Ok(PatioDto.Data, "Patio actualizado Correctamente");
                     }
                 }
                 else
                 {
-                    return Response<ClienteDto>.Ok(clienteDto.Data, clienteDto.Mensaje);
+                    return Response<PatioDto>.Ok(PatioDto.Data, PatioDto.Mensaje);
                 }
             }
             catch(Exception ex)
             {
                 _logger.LogError("Ocurrio un error de tipo {0}", ex);
-                return Response<ClienteDto>.Error("Ocurrio un error al actualizar el cliente");
+                return Response<PatioDto>.Error("Ocurrio un error al actualizar el Patio");
             }
         }
 
-        public async Task<Response<ClienteDto>> ConsultarCliente(string identificacion)
+        public async Task<Response<PatioDto>> Consultar(int numeroPuntoVenta)
         {
             try
             {
-                Cliente cliente = await _clienteRepo.ConsultarCliente(identificacion);
-                if (null == cliente)
+                Patio Patio = await _PatioRepo.Consultar(numeroPuntoVenta);
+                if (null == Patio)
                 {
-                    return Response<ClienteDto>.Ok(new(), "Cliente no encontrado");
+                    return Response<PatioDto>.Ok(new(), "Patio no encontrado");
                 }
-                ClienteDto clienteDto = await _mapper.From(cliente).AdaptToTypeAsync<ClienteDto>();
-                return Response<ClienteDto>.Ok(clienteDto, "Transaccion procesada correctamente");
+                PatioDto PatioDto = await _mapper.From(Patio).AdaptToTypeAsync<PatioDto>();
+                return Response<PatioDto>.Ok(PatioDto, "Transaccion procesada correctamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error de tipo {0}", ex);
-                 return Response<ClienteDto>.Error("Ocurrio un error al consultar el cliente");
+                 return Response<PatioDto>.Error("Ocurrio un error al consultar el Patio");
             }
         }
 
-        public async Task<Response<ClienteDto>> CrearCliente(ClienteDto clienteRequest)
+        public async Task<Response<PatioDto>> Crear(PatioDto PatioRequest)
         {
             try
             {
-                Response<ClienteDto> clienteDto = await ConsultarCliente(clienteRequest.Identificacion);
-                if (string.IsNullOrEmpty(clienteDto.Data.Identificacion))
+                Response<PatioDto> PatioDto = await Consultar(PatioRequest.NumeroPuntoVenta);
+                if (string.IsNullOrEmpty(PatioDto.Data.Nombre))
                 {
-                    Cliente cliente = await _mapper.From(clienteRequest).AdaptToTypeAsync<Cliente>();
-                    int esFinTransaccion = await _clienteRepo.CrearCliente(cliente);
+                    Patio Patio = await _mapper.From(PatioRequest).AdaptToTypeAsync<Patio>();
+                    int esFinTransaccion = await _PatioRepo.Crear(Patio);
                     if (esFinTransaccion == 0)
                     {
-                        _logger.LogWarning("Ocurrio un error al crear el cliente", cliente.Identificacion);
-                        return Response<ClienteDto>.Ok(new ClienteDto(), "Ocurrio un error al crear el cliente");
+                        _logger.LogWarning("Ocurrio un error al crear el Patio", Patio.NumeroPuntoVenta);
+                        return Response<PatioDto>.Ok(new PatioDto(), "Ocurrio un error al crear el Patio");
                     }
-                    clienteDto = await ConsultarCliente(clienteRequest.Identificacion);
-                    return Response<ClienteDto>.Ok(clienteDto.Data, "Cliente Creado Correctamente");
+                    PatioDto = await Consultar(PatioRequest.NumeroPuntoVenta);
+                    return Response<PatioDto>.Ok(PatioDto.Data, "Patio Creado Correctamente");
                 }
                 else
                 {
-                    return Response<ClienteDto>.Ok(new ClienteDto(), "El cliente ya se encuentra registrado");
+                    return Response<PatioDto>.Ok(new PatioDto(), "El Patio ya se encuentra registrado");
                 }
             }
             catch(Exception ex)
             {
                 _logger.LogError("Ocurrio un error de tipo {0}", ex);
-                return Response<ClienteDto>.Error("Ocurrio un error al crear el cliente");
+                return Response<PatioDto>.Error("Ocurrio un error al crear el Patio");
             }
         }
 
-        public async Task<Response<int>> EliminarCliente(string identificacion)
+        public async Task<Response<int>> Eliminar(int numeroPuntoVenta)
         {
             try
             {
-                Response<ClienteDto>? clienteDto = await ConsultarCliente(identificacion);
-                if (!string.IsNullOrEmpty(clienteDto.Data.Identificacion))
+                Response<PatioDto>? PatioDto = await Consultar(numeroPuntoVenta);
+                if (!string.IsNullOrEmpty(PatioDto.Data.Nombre))
                 {
-                    Cliente cliente = await _mapper.From(clienteDto.Data).AdaptToTypeAsync<Cliente>();
-                    int esFinTransaccion = await _clienteRepo.EliminarCliente(cliente);
+                    Patio Patio = await _mapper.From(PatioDto.Data).AdaptToTypeAsync<Patio>();
+                    int esFinTransaccion = await _PatioRepo.Eliminar(Patio);
                     if (esFinTransaccion == 0)
                     {
-                        return Response<int>.Ok(esFinTransaccion, "Ocurrio un error al eliminar el cliente");
+                        return Response<int>.Ok(esFinTransaccion, "Ocurrio un error al eliminar el Patio");
                     }
                     else
                     {
-                        return Response<int>.Ok(esFinTransaccion, "Cliente eliminado Correctamente");
+                        return Response<int>.Ok(esFinTransaccion, "Patio eliminado Correctamente");
                     }
                 }
                 else
                 {
-                    return Response<int>.Ok(0, clienteDto.Mensaje);
+                    return Response<int>.Ok(0, PatioDto.Mensaje);
                 }
             }
             catch(Exception ex)
             {
                 _logger.LogError("Ocurrio un error de tipo {0}", ex);
-                return Response<int>.Error("Ocurrio un error al eliminar el cliente");
+                return Response<int>.Error("Ocurrio un error al eliminar el Patio");
             }
         }
     }

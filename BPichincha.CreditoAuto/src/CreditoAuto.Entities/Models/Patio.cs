@@ -10,11 +10,18 @@ namespace CreditoAuto.Entities.Models
 {
     public class Patio
     {
-        [Key]
-        public int PatioId { get; set; }
+        public Patio()
+        {
+            AsignacionClientes = new HashSet<AsignacionCliente>();
+            Ejecutivos = new HashSet<Ejecutivo>();
+            
+        }
         public string Nombre { get; set; }
         public string Direccion { get; set; }
         public string Telefono { get; set; }
-        public int PuntoVenta { get; set; }
+        public int NumeroPuntoVenta { get; set; }
+
+        public virtual ICollection<Ejecutivo> Ejecutivos { get; set; }
+        public virtual ICollection<AsignacionCliente> AsignacionClientes { get; set; }
     }
 }

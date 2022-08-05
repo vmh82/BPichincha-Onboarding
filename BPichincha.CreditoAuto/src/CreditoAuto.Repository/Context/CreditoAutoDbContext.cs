@@ -11,18 +11,63 @@ namespace CreditoAuto.Repository.Context
 {
     public class CreditoAutoDbContext : DbContext
     {
-        public CreditoAutoDbContext()
-        {
-        }
 
         public CreditoAutoDbContext(DbContextOptions<CreditoAutoDbContext> options) : base(options)
         {
 
         }
+
+        public virtual DbSet<AsignacionCliente> AsignacionClientes { get; set; } = null!;
+        public virtual DbSet<Cliente> Clientes { get; set; } = null!;
+        public virtual DbSet<Marca> Marcas { get; set; } = null!;
+        public virtual DbSet<Patio> Patios { get; set; } = null!;
+        public virtual DbSet<Ejecutivo> Ejecutivos { get; set; } = null!;
+        public virtual DbSet<Vehiculo> Vehiculos { get; set; } = null!;
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+            }
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.HasAnnotation("Relational:Collation", "Modern_Spanish_CI_AS");
+
+            modelBuilder.Entity<AsignacionCliente>(entity =>
+            {
+                entity.HasKey(e => e.AsignacionId);
+
+                entity.ToTable("AsignacionCliente");
+
+                entity.Property(e => e.AsignacionId).HasColumnName("AsignacionId");
+
+                entity.Property(e => e.FechaAsignacion)
+                    .HasColumnType("datetime")
+                    .HasColumnName("FechaAsignacion");
+
+                entity.Property(e => e.NumeroPuntoVenta).HasColumnName("NumeroPuntoVenta");
+
+                entity.Property(e => e.Identificacion)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("Identificacion");
+
+                entity.HasOne(d => d.Patio)
+                    .WithMany(p => p.AsignacionClientes)
+                    .HasForeignKey(d => d.NumeroPuntoVenta)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AsignacionCliente_Patio");
+
+                entity.HasOne(d => d.Cliente)
+                    .WithMany(p => p.AsignacionClientes)
+                    .HasForeignKey(d => d.Identificacion)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AsignacionCliente_Cliente");
+            });
+
             modelBuilder.Entity<Marca>(entity =>
             {
                 entity.HasKey(e => e.MarcaId);
@@ -101,11 +146,87 @@ namespace CreditoAuto.Repository.Context
                     .HasColumnName("Telefono");
             });
 
+            modelBuilder.Entity<Patio>(entity =>
+            {
+                entity.HasKey(e => e.NumeroPuntoVenta)
+                      .HasName("PK_NumeroPuntoVenta");
+
+                entity.ToTable("Patio");
+                entity.Property(e => e.NumeroPuntoVenta).HasColumnName("NumeroPuntoVenta");
+
+                entity.Property(e => e.Direccion)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("Direccion");
+
+                entity.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("Nombre");
+
+                entity.Property(e => e.Telefono)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("Telefono");
+            });
+
+            modelBuilder.Entity<Ejecutivo>(entity =>
+            {
+                entity.HasKey(e => e.Identificacion)
+                    .HasName("PK_Ejecutivo");
+
+                entity.ToTable("Ejecutivo");
+
+                entity.Property(e => e.Identificacion)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("Identificacion");
+
+                entity.Property(e => e.Nombres)
+                  .IsRequired()
+                  .HasMaxLength(250)
+                  .IsUnicode(false)
+                  .HasColumnName("Nombres");
+
+                entity.Property(e => e.Apellidos)
+                .IsRequired()
+                .HasMaxLength(250)
+                .IsUnicode(false)
+                .HasColumnName("Apellidos");
+
+                entity.Property(e => e.Direccion)
+                  .IsRequired()
+                  .HasMaxLength(250)
+                  .IsUnicode(false)
+                  .HasColumnName("Direccion");
+
+                entity.Property(e => e.TelefonoConvencional)
+                   .IsRequired()
+                   .HasMaxLength(250)
+                   .IsUnicode(false)
+                   .HasColumnName("TelefonoConvencional");
+
+            
+                entity.Property(e => e.Celular)
+                    .IsRequired()
+                    .HasMaxLength(15)
+                    .IsUnicode(false)
+                    .HasColumnName("Celular");
+
+                entity.Property(e => e.NumeroPuntoVenta).HasColumnName("NumeroPuntoVenta");
+
+                entity.Property(e => e.Edad).HasColumnName("Edad");
+
+
+                entity.HasOne(d => d.Patio)
+                    .WithMany(p => p.Ejecutivos)
+                    .HasForeignKey(d => d.NumeroPuntoVenta)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Ejecutivo_Patio");
+            });
         }
-        public virtual DbSet<Patio> PatioAuto { get; set; } = null!;
-        public virtual DbSet<Cliente> Cliente { get; set; } = null!;
-        public virtual DbSet<Marca> Marca { get; set; } = null!;
-        public virtual DbSet<Ejecutivo> Ejecutivo { get; set; } = null!;
-        public virtual DbSet<Vehiculo> Vehiculo { get; set; } = null!;
     }
 }

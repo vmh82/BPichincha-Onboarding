@@ -44,6 +44,19 @@ namespace CreditoAuto.Entities.Mapper
                   .Map(dst => dst.SujetoCredito, org => org.SujetoCredito)
                   .IgnoreNonMapped(true);
 
+            config.NewConfig<AsignacionClienteDto, AsignacionCliente>()
+                .Map(dst => dst.Identificacion, org => org.Identificacion)
+                .Map(dst => dst.NumeroPuntoVenta, org => org.NumeroPuntoVenta)
+                .Map(dst => dst.FechaAsignacion, org => org.FechaAsignacion)
+                .IgnoreNonMapped(true);
+
+            config.NewConfig<AsignacionCliente, ClientePatioDto>()
+             .Map(dst => dst.Identificacion, org => org.Identificacion)
+             .Map(dst => dst.Nombres, org => string.Format("{0} {1}",org.Cliente.Nombres, org.Cliente.Apellidos))
+             .Map(dst => dst.DireccionPatio, org => org.Patio.Direccion)
+             .Map(dst => dst.NombrePatio, org => org.Patio.Nombre)
+             .IgnoreNonMapped(true);
+
             return config;
         }
     }

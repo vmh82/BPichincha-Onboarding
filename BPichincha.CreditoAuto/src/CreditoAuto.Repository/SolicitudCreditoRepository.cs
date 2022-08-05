@@ -22,7 +22,7 @@ namespace CreditoAuto.Repository
 
         public async Task<Cliente> ConsultarCliente(string identificacion)
         {
-            Cliente? cliente = await _context.Cliente.AsNoTracking().Where(q => q.Identificacion.Equals(identificacion)).FirstOrDefaultAsync();
+            Cliente? cliente = await _context.Clientes.AsNoTracking().Where(q => q.Identificacion.Equals(identificacion)).FirstOrDefaultAsync();
             return cliente;
         }
 
@@ -34,7 +34,7 @@ namespace CreditoAuto.Repository
 
         public async Task<int> EliminarCliente(Cliente cliente)
         {
-            _context.Cliente.Remove(cliente);
+            _context.Clientes.Remove(cliente);
             return await _context.SaveChangesAsync();
         }
     }

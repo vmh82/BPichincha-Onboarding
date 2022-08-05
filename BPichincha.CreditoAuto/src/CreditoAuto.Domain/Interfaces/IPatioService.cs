@@ -4,9 +4,9 @@ namespace CreditoAuto.Domain.Interfaces
 {
     public interface IPatioService
     {
-        Task<Response<PatioDto>> Consultar(int codigoPatio);
+        Task<Response<PatioDto>> Consultar(int numeroPuntoVenta);
         Task<Response<PatioDto>> Crear(PatioDto patioRequest);
-        Task<Response<int>> Eliminar(int codigoPatio);
+        Task<Response<int>> Eliminar(int numeroPuntoVenta);
         Task<Response<PatioDto>> Actualizar(PatioDto patioRequest);
     }
 

@@ -8,29 +8,29 @@ namespace CreditoAuto.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EjecutivoController : ControllerBase
+    public class AsignacionClienteController : ControllerBase
     {
-        private readonly IClienteService _clienteService;
-        public EjecutivoController(IClienteService clienteService)
+        private readonly IAsignacionClienteService _AsignacionClienteService;
+        public AsignacionClienteController(IAsignacionClienteService AsignacionClienteService)
         {
-            _clienteService = clienteService;
+            _AsignacionClienteService = AsignacionClienteService;
         }
 
         [HttpGet]
         [Route("Consultar")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ClienteDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ClientePatioDto))]
         public async Task<IActionResult> Consultar(string identificacion)
         {
-            Response<ClienteDto> response = await _clienteService.ConsultarCliente(identificacion);
+            Response<ClientePatioDto> response = await _AsignacionClienteService.Consultar(identificacion);
             return StatusCode((int)response.Status, response);
         }
 
         [HttpPost]
         [Route("Crear")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ClienteDto))]
-        public async Task<IActionResult> Crear(ClienteDto clienteDto)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ClientePatioDto))]
+        public async Task<IActionResult> Crear(AsignacionClienteDto AsignacionClienteDto)
         {
             if (!ModelState.IsValid)
             {
@@ -38,7 +38,7 @@ namespace CreditoAuto.API.Controllers
             }
             else
             {
-                Response<ClienteDto> response = await _clienteService.CrearCliente(clienteDto);
+                Response<ClientePatioDto> response = await _AsignacionClienteService.Crear(AsignacionClienteDto);
                 return StatusCode((int)response.Status, response);
                
             }
@@ -51,7 +51,7 @@ namespace CreditoAuto.API.Controllers
         public async Task<IActionResult> Eliminar(string identificacion)
         {
 
-            Response<int> response = await _clienteService.EliminarCliente(identificacion);
+            Response<int> response = await _AsignacionClienteService.Eliminar(identificacion);
             return StatusCode((int)response.Status, response);
 
         }
@@ -60,8 +60,8 @@ namespace CreditoAuto.API.Controllers
         [HttpPut]
         [Route("Actualizar")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ClienteDto))]
-        public async Task<IActionResult> Actualizar(ClienteDto clienteDto)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AsignacionClienteDto))]
+        public async Task<IActionResult> Actualizar(AsignacionClienteDto AsignacionClienteDto)
         {
             if (!ModelState.IsValid)
             {
@@ -69,7 +69,7 @@ namespace CreditoAuto.API.Controllers
             }
             else
             {
-                Response<ClienteDto> response = await _clienteService.ActualizarCliente(clienteDto);
+                Response<AsignacionClienteDto> response = await _AsignacionClienteService.Actualizar(AsignacionClienteDto);
                 return StatusCode((int)response.Status, response);
 
             }

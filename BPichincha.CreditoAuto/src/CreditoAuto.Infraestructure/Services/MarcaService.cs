@@ -8,123 +8,123 @@ using Microsoft.Extensions.Logging;
 
 namespace CreditoAuto.Infraestructure.Services
 {
-    public class MarcaService : IClienteService
+    public class MarcaService : IMarcaService
     {
-        private readonly IClienteRepository _clienteRepo;
+        private readonly IMarcaRepository _MarcaRepo;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
-        public MarcaService(IMapper mapper, ILogger<ClienteService> logger,IClienteRepository clienteRepo)
+        public MarcaService(IMapper mapper, ILogger<MarcaService> logger,IMarcaRepository MarcaRepo)
         {
             _mapper = mapper;
             _logger = logger;
-            _clienteRepo = clienteRepo;
+            _MarcaRepo = MarcaRepo;
         }
-        public async Task<Response<ClienteDto>> ActualizarCliente(ClienteDto clienteRequest)
+        public async Task<Response<MarcaDto>> Actualizar(MarcaDto MarcaRequest)
         {
             try
             {
-                Response<ClienteDto>? clienteDto = await ConsultarCliente(clienteRequest.Identificacion);
-                if (!string.IsNullOrEmpty(clienteDto.Data.Identificacion))
+                Response<MarcaDto>? MarcaDto = await Consultar(MarcaRequest.MarcaId);
+                if (!string.IsNullOrEmpty(MarcaDto.Data.Descripcion))
                 {
-                    Cliente cliente = await _mapper.From(clienteRequest).AdaptToTypeAsync<Cliente>();
-                    int esFinTransaccion = await _clienteRepo.ActualizarCliente(cliente);
+                    Marca marca = await _mapper.From(MarcaRequest).AdaptToTypeAsync<Marca>();
+                    int esFinTransaccion = await _MarcaRepo.Actualizar(marca);
                     if (esFinTransaccion == 0)
                     {                        
-                        return Response<ClienteDto>.Ok(new(), "Ocurrio un error al eliminar el cliente");
+                        return Response<MarcaDto>.Ok(new(), "Ocurrio un error al eliminar el Marca");
                     }
                     else
                     {
-                        clienteDto = await ConsultarCliente(clienteRequest.Identificacion);
-                        return Response<ClienteDto>.Ok(clienteDto.Data, "Cliente actualizado Correctamente");
+                        MarcaDto = await Consultar(MarcaRequest.MarcaId);
+                        return Response<MarcaDto>.Ok(MarcaDto.Data, "Marca actualizado Correctamente");
                     }
                 }
                 else
                 {
-                    return Response<ClienteDto>.Ok(clienteDto.Data, clienteDto.Mensaje);
+                    return Response<MarcaDto>.Ok(MarcaDto.Data, MarcaDto.Mensaje);
                 }
             }
             catch(Exception ex)
             {
                 _logger.LogError("Ocurrio un error de tipo {0}", ex);
-                return Response<ClienteDto>.Error("Ocurrio un error al actualizar el cliente");
+                return Response<MarcaDto>.Error("Ocurrio un error al actualizar el Marca");
             }
         }
 
-        public async Task<Response<ClienteDto>> ConsultarCliente(string identificacion)
+        public async Task<Response<MarcaDto>> Consultar(int marcaId)
         {
             try
             {
-                Cliente cliente = await _clienteRepo.ConsultarCliente(identificacion);
-                if (null == cliente)
+                Marca Marca = await _MarcaRepo.Consultar(marcaId);
+                if (null == Marca)
                 {
-                    return Response<ClienteDto>.Ok(new(), "Cliente no encontrado");
+                    return Response<MarcaDto>.Ok(new(), "Marca no encontrado");
                 }
-                ClienteDto clienteDto = await _mapper.From(cliente).AdaptToTypeAsync<ClienteDto>();
-                return Response<ClienteDto>.Ok(clienteDto, "Transaccion procesada correctamente");
+                MarcaDto MarcaDto = await _mapper.From(Marca).AdaptToTypeAsync<MarcaDto>();
+                return Response<MarcaDto>.Ok(MarcaDto, "Transaccion procesada correctamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError("Ocurrio un error de tipo {0}", ex);
-                 return Response<ClienteDto>.Error("Ocurrio un error al consultar el cliente");
+                 return Response<MarcaDto>.Error("Ocurrio un error al consultar el Marca");
             }
         }
 
-        public async Task<Response<ClienteDto>> CrearCliente(ClienteDto clienteRequest)
+        public async Task<Response<MarcaDto>> Crear(MarcaDto MarcaRequest)
         {
             try
             {
-                Response<ClienteDto> clienteDto = await ConsultarCliente(clienteRequest.Identificacion);
-                if (string.IsNullOrEmpty(clienteDto.Data.Identificacion))
+                Response<MarcaDto> MarcaDto = await Consultar(MarcaRequest.MarcaId);
+                if (string.IsNullOrEmpty(MarcaDto.Data.Descripcion))
                 {
-                    Cliente cliente = await _mapper.From(clienteRequest).AdaptToTypeAsync<Cliente>();
-                    int esFinTransaccion = await _clienteRepo.CrearCliente(cliente);
+                    Marca marca = await _mapper.From(MarcaRequest).AdaptToTypeAsync<Marca>();
+                    int esFinTransaccion = await _MarcaRepo.Crear(marca);
                     if (esFinTransaccion == 0)
                     {
-                        _logger.LogWarning("Ocurrio un error al crear el cliente", cliente.Identificacion);
-                        return Response<ClienteDto>.Ok(new ClienteDto(), "Ocurrio un error al crear el cliente");
+                        _logger.LogWarning("Ocurrio un error al crear el Marca", marca.Descripcion);
+                        return Response<MarcaDto>.Ok(new MarcaDto(), "Ocurrio un error al crear el Marca");
                     }
-                    clienteDto = await ConsultarCliente(clienteRequest.Identificacion);
-                    return Response<ClienteDto>.Ok(clienteDto.Data, "Cliente Creado Correctamente");
+                    MarcaDto = await Consultar(MarcaRequest.MarcaId);
+                    return Response<MarcaDto>.Ok(MarcaDto.Data, "Marca Creado Correctamente");
                 }
                 else
                 {
-                    return Response<ClienteDto>.Ok(new ClienteDto(), "El cliente ya se encuentra registrado");
+                    return Response<MarcaDto>.Ok(new MarcaDto(), "El Marca ya se encuentra registrado");
                 }
             }
             catch(Exception ex)
             {
                 _logger.LogError("Ocurrio un error de tipo {0}", ex);
-                return Response<ClienteDto>.Error("Ocurrio un error al crear el cliente");
+                return Response<MarcaDto>.Error("Ocurrio un error al crear el Marca");
             }
         }
 
-        public async Task<Response<int>> EliminarCliente(string identificacion)
+        public async Task<Response<int>> Eliminar(int marcaId)
         {
             try
             {
-                Response<ClienteDto>? clienteDto = await ConsultarCliente(identificacion);
-                if (!string.IsNullOrEmpty(clienteDto.Data.Identificacion))
+                Response<MarcaDto>? MarcaDto = await Consultar(marcaId);
+                if (!string.IsNullOrEmpty(MarcaDto.Data.Descripcion))
                 {
-                    Cliente cliente = await _mapper.From(clienteDto.Data).AdaptToTypeAsync<Cliente>();
-                    int esFinTransaccion = await _clienteRepo.EliminarCliente(cliente);
+                    Marca Marca = await _mapper.From(MarcaDto.Data).AdaptToTypeAsync<Marca>();
+                    int esFinTransaccion = await _MarcaRepo.Eliminar(Marca);
                     if (esFinTransaccion == 0)
                     {
-                        return Response<int>.Ok(esFinTransaccion, "Ocurrio un error al eliminar el cliente");
+                        return Response<int>.Ok(esFinTransaccion, "Ocurrio un error al eliminar el Marca");
                     }
                     else
                     {
-                        return Response<int>.Ok(esFinTransaccion, "Cliente eliminado Correctamente");
+                        return Response<int>.Ok(esFinTransaccion, "Marca eliminado Correctamente");
                     }
                 }
                 else
                 {
-                    return Response<int>.Ok(0, clienteDto.Mensaje);
+                    return Response<int>.Ok(0, MarcaDto.Mensaje);
                 }
             }
             catch(Exception ex)
             {
                 _logger.LogError("Ocurrio un error de tipo {0}", ex);
-                return Response<int>.Error("Ocurrio un error al eliminar el cliente");
+                return Response<int>.Error("Ocurrio un error al eliminar el Marca");
             }
         }
     }

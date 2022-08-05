@@ -19,6 +19,8 @@ namespace CreditoAuto.Repository
             {
                 CargarMarcas();
                 CargarClientes();
+                CargarPatios();
+                CargarEjecutivos();
             }
             catch (Exception ex)
             {
@@ -37,7 +39,7 @@ namespace CreditoAuto.Repository
             StreamReader documentoClientes = LeerArchivo("clientes");
             List<Cliente> clientes = new List<Cliente>();
             List<string> cedulas = new List<string>();
-            EsCargaInicial = _context.Cliente.Count();
+            EsCargaInicial = _context.Clientes.Count();
             if (EsCargaInicial == 0)
             {
                 while (!documentoClientes.EndOfStream)
@@ -69,7 +71,7 @@ namespace CreditoAuto.Repository
                         Console.WriteLine($"cliente{values[0]} ya registrado.");
                     }
                 }
-                _context.Cliente.AddRange(clientes);
+                _context.Clientes.AddRange(clientes);
                 _context.SaveChanges();
             }
         }
@@ -79,7 +81,7 @@ namespace CreditoAuto.Repository
             StreamReader documentoMarcas = LeerArchivo("marcas");
             List<Marca> marcas = new List<Marca>();
             List<string> nombres = new List<string>();
-            EsCargaInicial = _context.Marca.Count();
+            EsCargaInicial = _context.Marcas.Count();
             if (EsCargaInicial == 0)
             {
                 while (!documentoMarcas.EndOfStream)
@@ -100,7 +102,81 @@ namespace CreditoAuto.Repository
                     }
                 }
                 documentoMarcas.Close();
-                _context.Marca.AddRange(marcas);
+                _context.Marcas.AddRange(marcas);
+                _context.SaveChanges();
+            }
+        }
+
+        public void CargarPatios()
+        {
+
+            StreamReader documentoPatio = LeerArchivo("patios");
+            List<Patio> patios = new List<Patio>();
+            List<int> puntosVenta = new List<int>();
+            EsCargaInicial = _context.Patios.Count();
+            if (EsCargaInicial == 0)
+            {
+                while (!documentoPatio.EndOfStream)
+                {
+                    string? line = documentoPatio.ReadLine();
+                    string[]? values = line.Split(',');
+                    if (!puntosVenta.Contains(Convert.ToInt32(values[3])))
+                    {
+                        puntosVenta.Add(Convert.ToInt32(values[3]));
+                        patios.Add(new Patio()
+                        {
+                            Nombre = values[0],
+                            Direccion = values[1],
+                            Telefono = values[2],
+                            NumeroPuntoVenta = Convert.ToInt32(values[3])
+                        });
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Patio {values[0]} ya registrado.");
+                    }
+                }
+                documentoPatio.Close();
+                _context.Patios.AddRange(patios);
+                _context.SaveChanges();
+            }
+        }
+
+        public void CargarEjecutivos()
+        {
+
+            StreamReader documentoEjecutivos = LeerArchivo("ejecutivos");
+            List<Ejecutivo> ejecutivos = new List<Ejecutivo>();
+            List<string> identificacionEjecutivos = new List<string>();
+            EsCargaInicial = _context.Ejecutivos.Count();
+            if (EsCargaInicial == 0)
+            {
+                while (!documentoEjecutivos.EndOfStream)
+                {
+                    string? line = documentoEjecutivos.ReadLine();
+                    string[]? values = line.Split(',');
+                    if (!identificacionEjecutivos.Contains(values[0]))
+                    {
+                        identificacionEjecutivos.Add(values[0]);
+                        ejecutivos.Add(new Ejecutivo()
+                        {
+                            Identificacion = values[0],
+                            Nombres = values[1],
+                            Apellidos = values[2],
+                            Direccion = values[3],
+                            TelefonoConvencional = values[4],
+                            Celular =values[5],
+                            NumeroPuntoVenta = Convert.ToInt32(values[6]),
+                            Edad = Convert.ToInt32(values[7])
+                        });
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Ejecutivo {values[0]} ya registrado.");
+                    }
+                }
+                documentoEjecutivos.Close();
+                _context.Ejecutivos.AddRange(ejecutivos);
                 _context.SaveChanges();
             }
         }

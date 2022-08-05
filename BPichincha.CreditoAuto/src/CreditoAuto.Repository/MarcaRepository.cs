@@ -2,15 +2,9 @@
 using CreditoAuto.Entities.Models;
 using CreditoAuto.Repository.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace CreditoAuto.Repository
 {
-    public class MarcaRepository : IClienteRepository
+    public class MarcaRepository : IMarcaRepository
     {
         private readonly CreditoAutoDbContext _context;
         public MarcaRepository(CreditoAutoDbContext context)
@@ -18,27 +12,27 @@ namespace CreditoAuto.Repository
             _context = context;
         }
 
-        public async Task<int> ActualizarCliente(Cliente cliente)
+        public async Task<int> Actualizar(Marca Marca)
         {
-            _context.Update(cliente);
+            _context.Update(Marca);
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<Cliente> ConsultarCliente(string identificacion)
+        public async Task<Marca> Consultar(int marcaId)
         {
-            Cliente? cliente = await _context.Cliente.AsNoTracking().Where(q => q.Identificacion.Equals(identificacion)).FirstOrDefaultAsync();
-            return cliente;
+            Marca? marca = await _context.Marcas.AsNoTracking().Where(q => q.MarcaId.Equals(marcaId)).FirstOrDefaultAsync();
+            return marca;
         }
 
-        public async Task<int> CrearCliente(Cliente cliente)
+        public async Task<int> Crear(Marca Marca)
         {
-           _context.Set<Cliente>().Add(cliente);
+           _context.Set<Marca>().Add(Marca);
            return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> EliminarCliente(Cliente cliente)
+        public async Task<int> Eliminar(Marca Marca)
         {
-            _context.Cliente.Remove(cliente);
+            _context.Marcas.Remove(Marca);
             return await _context.SaveChangesAsync();
         }
     }

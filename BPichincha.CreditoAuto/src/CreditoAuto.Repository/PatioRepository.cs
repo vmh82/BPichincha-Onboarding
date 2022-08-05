@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CreditoAuto.Repository
 {
-    public class PatioRepository : IClienteRepository
+    public class PatioRepository : IPatioRepository
     {
         private readonly CreditoAutoDbContext _context;
         public PatioRepository(CreditoAutoDbContext context)
@@ -18,27 +18,27 @@ namespace CreditoAuto.Repository
             _context = context;
         }
 
-        public async Task<int> ActualizarCliente(Cliente cliente)
+        public async Task<int> Actualizar(Patio Patio)
         {
-            _context.Update(cliente);
+            _context.Update(Patio);
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<Cliente> ConsultarCliente(string identificacion)
+        public async Task<Patio> Consultar(int numeroPuntoVenta)
         {
-            Cliente? cliente = await _context.Cliente.AsNoTracking().Where(q => q.Identificacion.Equals(identificacion)).FirstOrDefaultAsync();
-            return cliente;
+            Patio? Patio = await _context.Patios.AsNoTracking().Where(q => q.NumeroPuntoVenta.Equals(numeroPuntoVenta)).FirstOrDefaultAsync();
+            return Patio;
         }
 
-        public async Task<int> CrearCliente(Cliente cliente)
+        public async Task<int> Crear(Patio Patio)
         {
-           _context.Set<Cliente>().Add(cliente);
+           _context.Set<Patio>().Add(Patio);
            return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> EliminarCliente(Cliente cliente)
+        public async Task<int> Eliminar(Patio Patio)
         {
-            _context.Cliente.Remove(cliente);
+            _context.Patios.Remove(Patio);
             return await _context.SaveChangesAsync();
         }
     }

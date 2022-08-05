@@ -10,14 +10,14 @@ namespace CreditoAuto.Infraestructure.Services
 {
     public class PatioService : IPatioService
     {
-        private readonly IPatioRepository _PatioRepo;
+        private readonly IPatioRepository _patioRepo;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         public PatioService(IMapper mapper, ILogger<PatioService> logger,IPatioRepository PatioRepo)
         {
             _mapper = mapper;
             _logger = logger;
-            _PatioRepo = PatioRepo;
+            _patioRepo = PatioRepo;
         }
         public async Task<Response<PatioDto>> Actualizar(PatioDto PatioRequest)
         {
@@ -27,7 +27,7 @@ namespace CreditoAuto.Infraestructure.Services
                 if (!string.IsNullOrEmpty(PatioDto.Data.Nombre))
                 {
                     Patio Patio = await _mapper.From(PatioRequest).AdaptToTypeAsync<Patio>();
-                    int esFinTransaccion = await _PatioRepo.Actualizar(Patio);
+                    int esFinTransaccion = await _patioRepo.Actualizar(Patio);
                     if (esFinTransaccion == 0)
                     {                        
                         return Response<PatioDto>.Ok(new(), "Ocurrio un error al eliminar el Patio");
@@ -54,7 +54,7 @@ namespace CreditoAuto.Infraestructure.Services
         {
             try
             {
-                Patio Patio = await _PatioRepo.Consultar(numeroPuntoVenta);
+                Patio Patio = await _patioRepo.Consultar(numeroPuntoVenta);
                 if (null == Patio)
                 {
                     return Response<PatioDto>.Ok(new(), "Patio no encontrado");
@@ -77,7 +77,7 @@ namespace CreditoAuto.Infraestructure.Services
                 if (string.IsNullOrEmpty(PatioDto.Data.Nombre))
                 {
                     Patio Patio = await _mapper.From(PatioRequest).AdaptToTypeAsync<Patio>();
-                    int esFinTransaccion = await _PatioRepo.Crear(Patio);
+                    int esFinTransaccion = await _patioRepo.Crear(Patio);
                     if (esFinTransaccion == 0)
                     {
                         _logger.LogWarning("Ocurrio un error al crear el Patio", Patio.NumeroPuntoVenta);
@@ -102,24 +102,18 @@ namespace CreditoAuto.Infraestructure.Services
         {
             try
             {
-                Response<PatioDto>? PatioDto = await Consultar(numeroPuntoVenta);
-                if (!string.IsNullOrEmpty(PatioDto.Data.Nombre))
+
+                Patio patio = await _patioRepo.Consultar(numeroPuntoVenta);
+                if (null != patio && (patio.SolicitudCreditos.Count() > 0 || patio.AsignacionClientes.Count() > 0))
                 {
-                    Patio Patio = await _mapper.From(PatioDto.Data).AdaptToTypeAsync<Patio>();
-                    int esFinTransaccion = await _PatioRepo.Eliminar(Patio);
-                    if (esFinTransaccion == 0)
-                    {
-                        return Response<int>.Ok(esFinTransaccion, "Ocurrio un error al eliminar el Patio");
-                    }
-                    else
-                    {
-                        return Response<int>.Ok(esFinTransaccion, "Patio eliminado Correctamente");
-                    }
+                    return Response<int>.Error("No se puede eliminar el patio, una solicitud o asignacion asociada");
                 }
-                else
+                if (null == patio)
                 {
-                    return Response<int>.Ok(0, PatioDto.Mensaje);
+                    return Response<int>.Ok(new(), "Patio no encontrado");
                 }
+                int esFinTransaccion = await _patioRepo.Eliminar(patio);
+                return Response<int>.Ok(esFinTransaccion, "patio eliminado correctamente");
             }
             catch(Exception ex)
             {

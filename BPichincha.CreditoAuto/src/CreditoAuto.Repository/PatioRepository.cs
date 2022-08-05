@@ -26,7 +26,7 @@ namespace CreditoAuto.Repository
 
         public async Task<Patio> Consultar(int numeroPuntoVenta)
         {
-            Patio? Patio = await _context.Patios.AsNoTracking().Where(q => q.NumeroPuntoVenta.Equals(numeroPuntoVenta)).FirstOrDefaultAsync();
+            Patio? Patio = await _context.Patios.AsNoTracking().Where(q => q.NumeroPuntoVenta.Equals(numeroPuntoVenta)).Include(q=>q.AsignacionClientes).Include(q=>q.SolicitudCreditos).FirstOrDefaultAsync();
             return Patio;
         }
 

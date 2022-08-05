@@ -10,14 +10,14 @@ namespace CreditoAuto.Infraestructure.Services
 {
     public class MarcaService : IMarcaService
     {
-        private readonly IMarcaRepository _MarcaRepo;
+        private readonly IMarcaRepository _marcaRepo;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         public MarcaService(IMapper mapper, ILogger<MarcaService> logger,IMarcaRepository MarcaRepo)
         {
             _mapper = mapper;
             _logger = logger;
-            _MarcaRepo = MarcaRepo;
+            _marcaRepo = MarcaRepo;
         }
         public async Task<Response<MarcaDto>> Actualizar(MarcaDto MarcaRequest)
         {
@@ -27,7 +27,7 @@ namespace CreditoAuto.Infraestructure.Services
                 if (!string.IsNullOrEmpty(MarcaDto.Data.Descripcion))
                 {
                     Marca marca = await _mapper.From(MarcaRequest).AdaptToTypeAsync<Marca>();
-                    int esFinTransaccion = await _MarcaRepo.Actualizar(marca);
+                    int esFinTransaccion = await _marcaRepo.Actualizar(marca);
                     if (esFinTransaccion == 0)
                     {                        
                         return Response<MarcaDto>.Ok(new(), "Ocurrio un error al eliminar el Marca");
@@ -54,7 +54,7 @@ namespace CreditoAuto.Infraestructure.Services
         {
             try
             {
-                Marca Marca = await _MarcaRepo.Consultar(marcaId);
+                Marca Marca = await _marcaRepo.Consultar(marcaId);
                 if (null == Marca)
                 {
                     return Response<MarcaDto>.Ok(new(), "Marca no encontrado");
@@ -77,7 +77,7 @@ namespace CreditoAuto.Infraestructure.Services
                 if (string.IsNullOrEmpty(MarcaDto.Data.Descripcion))
                 {
                     Marca marca = await _mapper.From(MarcaRequest).AdaptToTypeAsync<Marca>();
-                    int esFinTransaccion = await _MarcaRepo.Crear(marca);
+                    int esFinTransaccion = await _marcaRepo.Crear(marca);
                     if (esFinTransaccion == 0)
                     {
                         _logger.LogWarning("Ocurrio un error al crear el Marca", marca.Descripcion);
@@ -102,29 +102,22 @@ namespace CreditoAuto.Infraestructure.Services
         {
             try
             {
-                Response<MarcaDto>? MarcaDto = await Consultar(marcaId);
-                if (!string.IsNullOrEmpty(MarcaDto.Data.Descripcion))
+                Marca marca = await _marcaRepo.Consultar(marcaId);
+                if (null != marca && marca.Vehiculos.Count() > 0)
                 {
-                    Marca Marca = await _mapper.From(MarcaDto.Data).AdaptToTypeAsync<Marca>();
-                    int esFinTransaccion = await _MarcaRepo.Eliminar(Marca);
-                    if (esFinTransaccion == 0)
-                    {
-                        return Response<int>.Ok(esFinTransaccion, "Ocurrio un error al eliminar el Marca");
-                    }
-                    else
-                    {
-                        return Response<int>.Ok(esFinTransaccion, "Marca eliminado Correctamente");
-                    }
+                    return Response<int>.Error("No se puede eliminar la marca, posee vehiculos asociados");
                 }
-                else
+                if (null == marca)
                 {
-                    return Response<int>.Ok(0, MarcaDto.Mensaje);
+                    return Response<int>.Ok(new(), "Marca no encontrado");
                 }
+                int esFinTransaccion = await _marcaRepo.Eliminar(marca);
+                return Response<int>.Ok(esFinTransaccion, "marca eliminada correctamente");
             }
             catch(Exception ex)
             {
                 _logger.LogError("Ocurrio un error de tipo {0}", ex);
-                return Response<int>.Error("Ocurrio un error al eliminar el Marca");
+                return Response<int>.Error("Ocurrio un error al eliminar la Marca");
             }
         }
     }

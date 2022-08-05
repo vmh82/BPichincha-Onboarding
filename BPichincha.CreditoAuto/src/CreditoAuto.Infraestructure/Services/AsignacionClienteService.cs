@@ -30,7 +30,7 @@ namespace CreditoAuto.Infraestructure.Services
                 Response<ClientePatioDto>? AsignacionClienteDto = await Consultar(clienteRequest.Identificacion);
                 if (!string.IsNullOrEmpty(AsignacionClienteDto.Data.Identificacion))
                 {
-                    return Response<AsignacionClienteDto>.Ok(new(), "Ocurrio un error al actualizar el cliente");
+                    return Response<AsignacionClienteDto>.Ok(new(), "Ocurrio un error al actualizar la asignacion");
                 }
                 else
                 {

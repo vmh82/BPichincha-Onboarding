@@ -6,5 +6,7 @@
         public string Nombres { get; set; }
         public string NombrePatio { get; set; }
         public string DireccionPatio { get; set; }
+        public int NumeroPuntoVenta { get; set; }
+        public string FechaAsignacion { get; set; }
     }
 }

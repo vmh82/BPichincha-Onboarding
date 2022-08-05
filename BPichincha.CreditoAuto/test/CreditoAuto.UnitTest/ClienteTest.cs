@@ -9,6 +9,7 @@ using CreditoAuto.Repository.Context;
 using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
@@ -28,6 +29,7 @@ namespace CreditoAuto.UnitTest
         private Mock<ILogger<ClienteService>> _mockLogger;
         private Mock<IClienteRepository> _mockRepository;
         private CreditoAutoDbContext mocKContext;
+        private IConfiguration _configuration;
 
         [OneTimeSetUp]
         public void Setup()
@@ -37,6 +39,8 @@ namespace CreditoAuto.UnitTest
             _mockLogger = new Mock<ILogger<ClienteService>>();
             _mockRepository = new Mock<IClienteRepository>();
             mocKContext = new MockCreditoAutoDbContext().InicializarContexto();
+            _configuration = new MockConfiguracionDocumentos().InicializarConfiguration();
+            new InicializarDocumentos(mocKContext, _configuration).Inicializar();
         }
         [Test]
         public async Task Consultar_Cliente_No_Existente()

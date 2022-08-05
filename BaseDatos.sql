@@ -56,7 +56,7 @@ REFERENCES [dbo].[Patio] ([NumeroPuntoVenta])
 GO
 ALTER TABLE [dbo].[Ejecutivo] CHECK CONSTRAINT [FK_Ejecutivo_Patio]
 GO
-CREATE TABLE dbo.Asignacioncliente(
+CREATE TABLE dbo.AsignacionCliente(
 	AsignacionId int IDENTITY(1,1) NOT NULL,
 	Identificacion varchar(10) NOT NULL,
 	NumeroPuntoVenta int NOT NULL,
@@ -67,13 +67,32 @@ CREATE TABLE dbo.Asignacioncliente(
 )
 )
 GO
-ALTER TABLE [dbo].[Asignacioncliente]  WITH CHECK ADD  CONSTRAINT [FK_Asignacioncliente_Cliente] FOREIGN KEY([Identificacion])
+ALTER TABLE [dbo].[AsignacionCliente]  WITH CHECK ADD  CONSTRAINT [FK_AsignacionCliente_Cliente] FOREIGN KEY([Identificacion])
 REFERENCES [dbo].[Cliente] ([Identificacion])
 GO
-ALTER TABLE [dbo].[Asignacioncliente] CHECK CONSTRAINT [FK_Asignacioncliente_Cliente]
+ALTER TABLE [dbo].[AsignacionCliente] CHECK CONSTRAINT [FK_AsignacionCliente_Cliente]
 GO
-ALTER TABLE [dbo].[Asignacioncliente]  WITH CHECK ADD  CONSTRAINT [FK_Asignacioncliente_Patio] FOREIGN KEY([NumeroPuntoVenta])
+ALTER TABLE [dbo].[AsignacionCliente]  WITH CHECK ADD  CONSTRAINT [FK_AsignacionCliente_Patio] FOREIGN KEY([NumeroPuntoVenta])
 REFERENCES [dbo].[Patio] ([NumeroPuntoVenta ])
 GO
-ALTER TABLE [dbo].[Asignacioncliente] CHECK CONSTRAINT [FK_Asignacioncliente_Patio]
+ALTER TABLE [dbo].[AsignacionCliente] CHECK CONSTRAINT [FK_AsignacionCliente_Patio]
+GO
+CREATE TABLE [dbo].[Vehiculo](
+	Placa varchar(8) NOT NULL,
+	Modelo varchar (50) NOT NULL,
+	NumeroChasis varchar(50) NOT NULL,
+	MarcaId int NOT NULL,
+	Tipo varchar(50) NOT NULL,
+	Cilindraje decimal(18,2) NOT NULL,
+	Avaluo money NOT NULL,
+ CONSTRAINT PK_Vehiculo PRIMARY KEY CLUSTERED 
+(
+	Placa ASC
+)
+)
+GO
+ALTER TABLE [dbo].[Vehiculo]  WITH CHECK ADD  CONSTRAINT [FK_Vehiculo_Marca] FOREIGN KEY([MarcaId])
+REFERENCES [dbo].[Marca] ([MarcaId])
+GO
+ALTER TABLE [dbo].[Vehiculo] CHECK CONSTRAINT [FK_Vehiculo_Marca]
 GO

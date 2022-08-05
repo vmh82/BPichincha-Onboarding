@@ -11,12 +11,9 @@ namespace CreditoAuto.Repository.Context
 {
     public class CreditoAutoDbContext : DbContext
     {
-
         public CreditoAutoDbContext(DbContextOptions<CreditoAutoDbContext> options) : base(options)
         {
-
         }
-
         public virtual DbSet<AsignacionCliente> AsignacionClientes { get; set; } = null!;
         public virtual DbSet<Cliente> Clientes { get; set; } = null!;
         public virtual DbSet<Marca> Marcas { get; set; } = null!;
@@ -226,6 +223,52 @@ namespace CreditoAuto.Repository.Context
                     .HasForeignKey(d => d.NumeroPuntoVenta)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Ejecutivo_Patio");
+            });
+
+            modelBuilder.Entity<Vehiculo>(entity =>
+            {
+                entity.HasKey(e => e.Placa)
+                    .HasName("PK_Vehiculo");
+
+                entity.ToTable("Vehiculo");
+
+                entity.Property(e => e.Avaluo)
+                    .HasColumnType("money")
+                    .HasColumnName("Avaluo");
+
+                entity.Property(e => e.Cilindraje).IsRequired().IsUnicode(false).HasColumnName("Cilindraje");
+
+                entity.Property(e => e.MarcaId).HasColumnName("MarcaId");
+
+                entity.Property(e => e.Modelo)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("Modelo");
+
+                entity.Property(e => e.NumeroChasis)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NumeroChasis");
+
+                entity.Property(e => e.Placa)
+                    .IsRequired()
+                    .HasMaxLength(8)
+                    .IsUnicode(false)
+                    .HasColumnName("Placa");
+
+                entity.Property(e => e.Tipo)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("Tipo");
+
+                entity.HasOne(d => d.Marca)
+                    .WithMany(p => p.Vehiculos)
+                    .HasForeignKey(d => d.MarcaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Vehiculo_Marca");
             });
         }
     }

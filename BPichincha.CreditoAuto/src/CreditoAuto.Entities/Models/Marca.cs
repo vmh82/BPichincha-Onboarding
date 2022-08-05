@@ -14,10 +14,6 @@ namespace CreditoAuto.Entities.Models
         {
             Vehiculos = new HashSet<Vehiculo>();
         }
-
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
         public int MarcaId { get; set; }
         public string Descripcion { get; set; }
         public virtual ICollection<Vehiculo> Vehiculos { get; set; }

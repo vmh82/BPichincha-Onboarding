@@ -8,6 +8,7 @@ using CreditoAuto.Repository;
 using CreditoAuto.Repository.Context;
 using Mapster;
 using MapsterMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -16,6 +17,7 @@ using System.Threading.Tasks;
 
 namespace CreditoAuto.UnitTest
 {
+    [TestFixture]
     public class AsignacionClienteTest
     {
         private IMapper _mapper;
@@ -24,6 +26,7 @@ namespace CreditoAuto.UnitTest
         private CreditoAutoDbContext mocKContext;
         private Mock<IClienteService> _mockClienteService;
         private Mock<IPatioService> _mockPatioService;
+        private IConfiguration _configuration;
 
         [OneTimeSetUp]
         public void Setup()
@@ -35,13 +38,15 @@ namespace CreditoAuto.UnitTest
             _mockClienteService = new Mock<IClienteService>();
             _mockPatioService = new Mock<IPatioService>();
             mocKContext = new MockCreditoAutoDbContext().InicializarContexto();
+            _configuration = new MockConfiguracionDocumentos().InicializarConfiguration();
+            new InicializarDocumentos(mocKContext, _configuration).Inicializar();
         }
 
         [Test]
         public async Task  ValidarCreacion_Cliente_Patio_NoExiste()
         {
             AsignacionClienteService asignacionService = new AsignacionClienteService(_mapper, _mockLogger.Object, _mockRepository.Object, _mockClienteService.Object, _mockPatioService.Object);
-            Response<AsignacionClienteDto>? asignacionResponse = await asignacionService.Consultar("1724389745");
+            Response<ClientePatioDto>? asignacionResponse = await asignacionService.Consultar("1724389745");
             Assert.IsNotNull(asignacionResponse.Mensaje);
             Assert.IsNull(asignacionResponse.Data.Identificacion);
             Assert.AreEqual("Cliente no encontrado", asignacionResponse.Mensaje);
@@ -54,7 +59,7 @@ namespace CreditoAuto.UnitTest
             //preparacion
             AsignacionCliente asignacion = new AsignacionCliente
             {
-                Identificacion = "1724389746",
+                Identificacion = "1724389741",
                 FechaAsignacion = DateTime.Now,
                 NumeroPuntoVenta = 1
             };

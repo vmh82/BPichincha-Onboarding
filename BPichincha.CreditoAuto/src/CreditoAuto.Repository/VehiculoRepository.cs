@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CreditoAuto.Repository
 {
-    public class VehiculoRepository : IClienteRepository
+    public class VehiculoRepository : IVehiculoRepository
     {
         private readonly CreditoAutoDbContext _context;
         public VehiculoRepository(CreditoAutoDbContext context)
@@ -18,27 +18,27 @@ namespace CreditoAuto.Repository
             _context = context;
         }
 
-        public async Task<int> ActualizarCliente(Cliente cliente)
+        public async Task<int> Actualizar(Vehiculo vehiculo)
         {
-            _context.Update(cliente);
+            _context.Update(vehiculo);
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<Cliente> ConsultarCliente(string identificacion)
+        public async Task<Vehiculo> Consultar(string placa)
         {
-            Cliente? cliente = await _context.Clientes.AsNoTracking().Where(q => q.Identificacion.Equals(identificacion)).FirstOrDefaultAsync();
-            return cliente;
+            Vehiculo? vehiculo = await _context.Vehiculos.Where(q => q.Placa.Equals(placa)).Include(q => q.Marca).FirstOrDefaultAsync();
+            return vehiculo;
         }
 
-        public async Task<int> CrearCliente(Cliente cliente)
+        public async Task<int> Crear(Vehiculo vehiculo)
         {
-           _context.Set<Cliente>().Add(cliente);
+           _context.Set<Vehiculo>().Add(vehiculo);
            return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> EliminarCliente(Cliente cliente)
+        public async Task<int> Eliminar(Vehiculo vehiculo)
         {
-            _context.Clientes.Remove(cliente);
+            _context.Vehiculos.Remove(vehiculo);
             return await _context.SaveChangesAsync();
         }
     }

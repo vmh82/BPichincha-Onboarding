@@ -9,6 +9,7 @@ namespace CreditoAuto.Domain.Interfaces
         Task<int> Actualizar(SolicitudCredito solicitud);
 
         Task<SolicitudCredito> ValidarSolicitudPorDia(SolicitudCredito solicitud);
+        Task<SolicitudCredito> ValidarReservaVehiculo(SolicitudCredito solicitud);
     }
 
 }

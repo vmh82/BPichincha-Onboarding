@@ -48,5 +48,11 @@ namespace CreditoAuto.Repository
             && q.FechaSolicitud.Date == DateTime.Now.Date && q.Estado.Equals(1)).FirstOrDefaultAsync();
             return solicitudCredito;
         }
+
+        public async Task<SolicitudCredito> ValidarReservaVehiculo(SolicitudCredito solicitud)
+        {
+            SolicitudCredito? solicitudCredito = await _context.SolicitudCreditos.Where(q => q.Placa.Equals(solicitud.Placa) && q.Estado.Equals(1)).FirstOrDefaultAsync();
+            return solicitudCredito;
+        }
     }
 }

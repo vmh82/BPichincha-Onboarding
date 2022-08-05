@@ -17,12 +17,14 @@ namespace CreditoAuto.Infraestructure.Services
         private readonly IPatioService _patioService;
         private readonly IEjecutivoService _ejecutivoService;
         private readonly IAsignacionClienteService _asignacionClienteService;
+        private readonly IVehiculoService _vehiculoService;
         public SolicitudCreditoService(IMapper mapper, 
             ILogger<SolicitudCreditoService> logger,
             
             ISolicitudCreditoRepository solicitudRepo, IClienteService clienteService,
             IPatioService patioService, IEjecutivoService ejecutivoService,
-            IAsignacionClienteService asignacionClienteService)
+            IAsignacionClienteService asignacionClienteService,
+            IVehiculoService vehiculoService)
         {
             _mapper = mapper;
             _logger = logger;
@@ -31,6 +33,7 @@ namespace CreditoAuto.Infraestructure.Services
             _patioService = patioService;
             _ejecutivoService = ejecutivoService;
             _asignacionClienteService = asignacionClienteService;
+            _vehiculoService = vehiculoService;
         }
        
         public async Task<Response<SolicitudCreditoDto>> Consultar(string identificacion)
@@ -63,16 +66,21 @@ namespace CreditoAuto.Infraestructure.Services
                     return Response<SolicitudCreditoDto>.Ok(new(), EsSolicitudValida.Mensaje);
                 }
                 SolicitudCredito solicitud = await _mapper.From(solicitudCreditoRequest).AdaptToTypeAsync<SolicitudCredito>();
-                SolicitudCredito solicitudCreada =  await _solicitudRepo.ValidarSolicitudPorDia(solicitud);
-                if(null != solicitudCreada)
+                SolicitudCredito solicitudPorDia =  await _solicitudRepo.ValidarSolicitudPorDia(solicitud);
+                if(null != solicitudPorDia)
                 {
                     return Response<SolicitudCreditoDto>.Ok(new(), "El cliente ya cuenta con una solicitud en proceso");
+                }
+                SolicitudCredito reservaVehiculo = await _solicitudRepo.ValidarReservaVehiculo(solicitud);
+                if(null != reservaVehiculo)
+                {
+                    return Response<SolicitudCreditoDto>.Ok(new(), "El vehiculo ya se encuentra reservado por otro cliente");
                 }
                 int esFinTransaccion =  await _solicitudRepo.Crear(solicitud);
                 AsignacionClienteDto? asginacionClienteDto = await _mapper.From(solicitudCreditoRequest).AdaptToTypeAsync<AsignacionClienteDto>();
                 await _asignacionClienteService.Crear(asginacionClienteDto);
-                SolicitudCredito solicitudResponse = await _solicitudRepo.Consultar(solicitudCreditoRequest.IdentificacionCliente);
-                return Response<SolicitudCreditoDto>.Ok(new(), "Solicitud creada exitosamente");
+                Response<SolicitudCreditoDto>? solicitudResponse = await Consultar(solicitudCreditoRequest.IdentificacionCliente);
+                return Response<SolicitudCreditoDto>.Ok(solicitudResponse.Data, "Solicitud creada exitosamente");
             }
             catch(Exception ex)
             {
@@ -86,6 +94,7 @@ namespace CreditoAuto.Infraestructure.Services
             Response<ClienteDto>? clienteResponse = await _clienteService.ConsultarCliente(solicitudCreditoRequest.IdentificacionCliente);
             Response<PatioDto>? patioResponse = await _patioService.Consultar(solicitudCreditoRequest.NumeroPuntoVenta);
             Response<EjecutivoDto> ejecutivoResponse = await _ejecutivoService.Consultar(solicitudCreditoRequest.IdentificacionEjecutivo);
+            Response<VehiculoDto> vehiculoResponse = await _vehiculoService.Consultar(solicitudCreditoRequest.Placa);
             if (string.IsNullOrEmpty(clienteResponse.Data.Identificacion))
             {
                 return Response<bool>.Ok(false, clienteResponse.Mensaje);
@@ -93,12 +102,17 @@ namespace CreditoAuto.Infraestructure.Services
 
             if (string.IsNullOrEmpty(patioResponse.Data.Nombre))
             {
-                return Response<bool>.Ok(false, clienteResponse.Mensaje);
+                return Response<bool>.Ok(false, patioResponse.Mensaje);
             }
 
             if (string.IsNullOrEmpty(ejecutivoResponse.Data.Nombres))
             {
                 return Response<bool>.Ok(false, ejecutivoResponse.Mensaje);
+            }
+
+            if (string.IsNullOrEmpty(vehiculoResponse.Data.NumeroChasis))
+            {
+                return Response<bool>.Ok(false, vehiculoResponse.Mensaje);
             }
 
             return  Response<bool>.Ok(true, string.Empty);

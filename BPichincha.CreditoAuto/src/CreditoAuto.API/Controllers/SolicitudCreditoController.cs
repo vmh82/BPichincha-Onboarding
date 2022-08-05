@@ -43,36 +43,5 @@ namespace CreditoAuto.API.Controllers
                
             }
         }
-
-        [HttpDelete]
-        [Route("Eliminar")]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-        public async Task<IActionResult> Eliminar(string identificacion)
-        {
-
-            Response<int> response = await _SolicitudCreditoService.Eliminar(12);
-            return StatusCode((int)response.Status, response);
-
-        }
-
-
-        [HttpPut]
-        [Route("Actualizar")]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SolicitudCreditoDto))]
-        public async Task<IActionResult> Actualizar(SolicitudCreditoDto SolicitudCreditoDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return StatusCode(StatusCodes.Status400BadRequest, ModelState);
-            }
-            else
-            {
-                Response<SolicitudCreditoDto> response = await _SolicitudCreditoService.Actualizar(SolicitudCreditoDto);
-                return StatusCode((int)response.Status, response);
-
-            }
-        }
     }
 }

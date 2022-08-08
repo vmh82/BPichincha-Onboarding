@@ -108,6 +108,7 @@ CREATE TABLE dbo.SolicitudCredito(
 	IdentificacionEjecutivo varchar(10) NOT NULL,
 	Observacion varchar(256) NULL,
 	Estado int NOT NULL,
+	FechaSolicitud Datetime
  CONSTRAINT [PK_SolicitudCredito] PRIMARY KEY CLUSTERED 
 (
 	SolicitudId ASC

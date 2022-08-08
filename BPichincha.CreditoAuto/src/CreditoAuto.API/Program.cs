@@ -72,3 +72,4 @@ CreditoAutoDbContext? autoContext = scope.ServiceProvider.GetService<CreditoAuto
 IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 new InicializarDocumentos(autoContext, configuration).Inicializar();//Inicializacion para subir documentos al inico del programa
 app.Run();
+public partial class Program { }

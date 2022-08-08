@@ -74,7 +74,7 @@ namespace CreditoAuto.Infraestructure.Services
                 SolicitudCredito reservaVehiculo = await _solicitudRepo.ValidarReservaVehiculo(solicitud);
                 if(null != reservaVehiculo)
                 {
-                    return Response<SolicitudCreditoDto>.Ok(new(), "El vehiculo ya se encuentra reservado por otro cliente");
+                    return Response<SolicitudCreditoDto>.Ok(new(), "El vehiculo ya se encuentra reservado");
                 }
                 int esFinTransaccion =  await _solicitudRepo.Crear(solicitud);
                 AsignacionClienteDto? asginacionClienteDto = await _mapper.From(solicitudCreditoRequest).AdaptToTypeAsync<AsignacionClienteDto>();

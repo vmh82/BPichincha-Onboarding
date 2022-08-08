@@ -1,0 +1,648 @@
+{
+	"info": {
+		"_postman_id": "2a5c280f-bc3d-458d-909e-bbc40152ee21",
+		"name": "CreditoAuto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ActualizarAsignacion",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"identificacion\": \"1724389646\",\r\n  \"numeroPuntoVenta\": 1,\r\n  \"fechaAsignacion\": \"2022-08-04T17:21:56.380Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/asignacioncliente/actualizar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"asignacioncliente",
+						"actualizar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ActualizarPatio",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\":\"Juan Perez\",\r\n    \"direccion\":\"Las Casas\",\r\n    \"telefono\":\"3030668\",\r\n    \"numeroPuntoVenta\": 200\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/patio/actualizar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"patio",
+						"actualizar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ActualizarCliente",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Identificacion\" : \"1724389756\",\r\n    \"Nombres\" : \"ClienteTest\",\r\n    \"Apellidos\" : \"ClienteTest\",\r\n    \"EstadoCivil\" : \"Soltero\",\r\n    \"Direccion\" : \"Las casas\",\r\n    \"Edad\" : 29,\r\n    \"FechaNacimiento\" : \"28/11/1992\",\r\n    \"NombreConyugue\" : \"NA\",\r\n    \"SujetoCredito\" : \"SujetoACredito\",\r\n    \"Telefono\" : \"3030668\",\r\n    \"IdentificacionConyugue\" : \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/cliente/actualizar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"cliente",
+						"actualizar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ActualizarVehiculo",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n    \"MarcaId\": 1,\r\n    \"Modelo\": \"Verna3\",\r\n    \"Cilindraje\": 1.455,\r\n    \"Avaluo\": 17500,\r\n    \"NumeroChasis\": \"123123123132\",\r\n    \"Placa\": \"PSP665\",\r\n    \"Tipo\":\"Sedan\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/vehiculo/actualizar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"vehiculo",
+						"actualizar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ConsultarAsignacion",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/asignacioncliente/consultar?Identificacion=1724389615",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"asignacioncliente",
+						"consultar"
+					],
+					"query": [
+						{
+							"key": "Identificacion",
+							"value": "1724389615"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ConsultarSolicitudCredito",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/solicitudcredito/consultar?Identificacion=1724389615",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"solicitudcredito",
+						"consultar"
+					],
+					"query": [
+						{
+							"key": "Identificacion",
+							"value": "1724389615"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ConsultarVehiculo",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/vehiculo/consultar?placa=PSP665",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"vehiculo",
+						"consultar"
+					],
+					"query": [
+						{
+							"key": "placa",
+							"value": "PSP665"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ConsultarMarca",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/marca/consultar?marcaId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"marca",
+						"consultar"
+					],
+					"query": [
+						{
+							"key": "marcaId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ConsultarPatio",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/patio/consultar?numeroPuntoVenta=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"patio",
+						"consultar"
+					],
+					"query": [
+						{
+							"key": "numeroPuntoVenta",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EliminarAsignacion",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/asignacioncliente/eliminar?Identificacion=1724389615",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"asignacioncliente",
+						"eliminar"
+					],
+					"query": [
+						{
+							"key": "Identificacion",
+							"value": "1724389615"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EliminarVehiculo",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/vehiculo/eliminar?placa=1724389615",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"vehiculo",
+						"eliminar"
+					],
+					"query": [
+						{
+							"key": "placa",
+							"value": "1724389615"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EliminarMarca",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/marca/eliminar?marcaId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"marca",
+						"eliminar"
+					],
+					"query": [
+						{
+							"key": "marcaId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EliminarPatio",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/patio/eliminar?numeroPuntoVenta=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"patio",
+						"eliminar"
+					],
+					"query": [
+						{
+							"key": "numeroPuntoVenta",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearVehiculo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n    \"MarcaId\": 2,\r\n    \"Modelo\": \"TaxMDLS\",\r\n    \"Cilindraje\": 1.455,\r\n    \"Avaluo\": 17500,\r\n    \"NumeroChasis\": \"123123123132\",\r\n    \"Placa\": \"PSP668\",\r\n    \"Tipo\":\"Sedan\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/vehiculo/crear",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"vehiculo",
+						"crear"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearMarca",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n    \"Descripcion\" : \"Mitsubishi\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/marca/crear",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"marca",
+						"crear"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearPatio",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\":\"Juan Perez\",\r\n    \"direccion\":\"Las Casas\",\r\n    \"telefono\":\"3030668\",\r\n    \"numeroPuntoVenta\": 200\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/patio/crear",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"patio",
+						"crear"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearCliente",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Identificacion\" : \"1724389756\",\r\n    \"Nombres\" : \"ClienteTest\",\r\n    \"Apellidos\" : \"ClienteTest\",\r\n    \"EstadoCivil\" : \"Soltero\",\r\n    \"Direccion\" : \"Las casas\",\r\n    \"Edad\" : 29,\r\n    \"FechaNacimiento\" : \"28/11/1992\",\r\n    \"NombreConyugue\" : \"NA\",\r\n    \"SujetoCredito\" : \"SujetoACredito\",\r\n    \"Telefono\" : \"3030668\",\r\n    \"IdentificacionConyugue\" : \"123456\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/cliente/crear",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"cliente",
+						"crear"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AsignacionCliente",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"identificacion\": \"1724389646\",\r\n  \"numeroPuntoVenta\": 1,\r\n  \"fechaAsignacion\": \"2022-08-04T17:21:56.380Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/asignacioncliente/crear",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"asignacioncliente",
+						"crear"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearSolicitudCredito",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"IdentificacionCliente\" : \"1724389616\",\r\n    \"NumeroPuntoVenta\" : 1,\r\n    \"Placa\" : \"PSP665\",\r\n    \"MesesPlazo\" : 24,\r\n    \"Cuotas\" : 5,\r\n    \"Entrada\" : 1250,\r\n    \"IdentificacionEjecutivo\" : \"1726394781\",\r\n    \"Observacion\" : \"ssss\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/solicitudcredito/crear",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"solicitudcredito",
+						"crear"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

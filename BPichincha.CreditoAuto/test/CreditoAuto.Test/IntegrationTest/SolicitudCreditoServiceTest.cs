@@ -78,7 +78,7 @@ namespace CreditoAuto.Test.IntegrationTest
             {
                 IdentificacionCliente = "1724389745",
                 NumeroPuntoVenta = 265,
-                Placa = "PSP665",
+                Placa = "PSP667",
                 MesesPlazo = 24,
                 Cuotas = 5,
                 Entrada = 1250M,
@@ -100,7 +100,7 @@ namespace CreditoAuto.Test.IntegrationTest
             solicitudCreditoDto = new SolicitudCreditoDto
             {
                 IdentificacionCliente = "171496423",
-                NumeroPuntoVenta = 2,
+                NumeroPuntoVenta = 1,
                 Placa = "PSP665",
                 MesesPlazo = 24,
                 Cuotas = 5,
@@ -122,9 +122,9 @@ namespace CreditoAuto.Test.IntegrationTest
         {
             solicitudCreditoDto = new SolicitudCreditoDto
             {
-                IdentificacionCliente = "1724389645",
+                IdentificacionCliente = "1724389646",
                 NumeroPuntoVenta = 1,
-                Placa = "PSP661",
+                Placa = "PSP667",
                 MesesPlazo = 24,
                 Cuotas = 5,
                 Entrada = 1250M,
@@ -137,7 +137,7 @@ namespace CreditoAuto.Test.IntegrationTest
             string stringResult = await response.Content.ReadAsStringAsync();
             Assert.NotNull(stringResult);
             Response<SolicitudCreditoDto> solicitudResponse = JsonConvert.DeserializeObject<Response<SolicitudCreditoDto>>(stringResult);
-            Assert.AreEqual("El cliente ya cuenta con una solicitud en proceso", solicitudResponse.Mensaje);
+            Assert.AreEqual("Solicitud creada exitosamente", solicitudResponse.Mensaje);
         }
 
 
@@ -146,9 +146,9 @@ namespace CreditoAuto.Test.IntegrationTest
         {
             solicitudCreditoDto = new SolicitudCreditoDto
             {
-                IdentificacionCliente = "1724389645",
+                IdentificacionCliente = "1724389646",
                 NumeroPuntoVenta = 1,
-                Placa = "PSP665",
+                Placa = "PSP667",
                 MesesPlazo = 24,
                 Cuotas = 5,
                 Entrada = 1250M,

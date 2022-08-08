@@ -21,8 +21,6 @@ namespace CreditoAuto.Test.IntegrationTest
         {
             var webAppFactory = new WebApplicationFactory<Program>();
             _httpClient = webAppFactory.CreateDefaultClient();
-
-           
         }
 
         [Test]

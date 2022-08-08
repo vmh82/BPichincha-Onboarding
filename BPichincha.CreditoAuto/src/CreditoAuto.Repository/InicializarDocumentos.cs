@@ -1,5 +1,7 @@
 ﻿using CreditoAuto.Entities.Models;
+using CreditoAuto.Entities.Utils;
 using CreditoAuto.Repository.Context;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 namespace CreditoAuto.Repository
 {
@@ -22,21 +24,44 @@ namespace CreditoAuto.Repository
                 CargarPatios();
                 CargarEjecutivos();
             }
+            catch (CreditoAutoException aex)
+            {
+                Console.WriteLine($"Excepcion controlada, ocurrio un error de tipo {aex.Message}");
+                throw;
+            }
+            catch (DbUpdateConcurrencyException ucex)
+            {
+                Console.WriteLine($"Excepcion controlada, ocurrio un error de tipo {ucex.Message}");
+                throw new CreditoAutoException(ucex.Message);
+            }
+            catch (DbUpdateException uex)
+            {
+                Console.WriteLine($"Excepcion controlada, ocurrio un error de tipo {uex.Message}");
+                throw new CreditoAutoException(uex.Message);
+            }
             catch (Exception ex)
             {
-                Console.WriteLine($"Ocurrio un error de tipo {ex.Message}");
+                Console.WriteLine($"Excepcion no controlada, ocurrio un error de tipo {ex.Message}");
+                throw;
             }
         }
         
         public StreamReader LeerArchivo(string documento)
         {
-            StreamReader reader = new StreamReader(File.OpenRead(_configuration[$"Documentos:{documento}"]));
-            return reader;
+            try
+            {
+                StreamReader reader = new StreamReader(File.OpenRead(_configuration[$"Documentos:{documento}"]));
+                return reader;
+            }
+            catch(IOException ex) 
+            {
+                throw new CreditoAutoException($"Excepcion controlada, lectura de archivo{ ex.Message}");
+            }
         }
 
-        public void CargarClientes()
+        public void CargarClientes(string documento = "clientes")
         {
-            StreamReader documentoClientes = LeerArchivo("clientes");
+            StreamReader documentoClientes = LeerArchivo(documento);
             List<Cliente> clientes = new List<Cliente>();
             List<string> cedulas = new List<string>();
             EsCargaInicial = _context.Clientes.Count();
@@ -49,6 +74,7 @@ namespace CreditoAuto.Repository
                     string[]? values = line.Split(',');
                     if (!cedulas.Contains(values[0]))
                     {
+                        cedulas.Add(values[0]);
                         Cliente cliente = new Cliente()
                         {
                             Identificacion = values[0],
@@ -68,7 +94,7 @@ namespace CreditoAuto.Repository
                     }
                     else
                     {
-                        Console.WriteLine($"cliente{values[0]} ya registrado.");
+                        throw new CreditoAutoException($"cliente {values[0]} ya registrado.");
                     }
                 }
                 _context.Clientes.AddRange(clientes);
@@ -98,7 +124,7 @@ namespace CreditoAuto.Repository
                     }
                     else
                     {
-                        Console.WriteLine($"Marca {values[0]} ya registrada.");
+                        throw new CreditoAutoException($"cliente {values[0]} ya registrado.");
                     }
                 }
                 documentoMarcas.Close();
@@ -133,7 +159,7 @@ namespace CreditoAuto.Repository
                     }
                     else
                     {
-                        Console.WriteLine($"Patio {values[0]} ya registrado.");
+                        throw new CreditoAutoException($"cliente {values[0]} ya registrado.");
                     }
                 }
                 documentoPatio.Close();
@@ -172,7 +198,7 @@ namespace CreditoAuto.Repository
                     }
                     else
                     {
-                        Console.WriteLine($"Ejecutivo {values[0]} ya registrado.");
+                        throw new CreditoAutoException($"cliente {values[0]} ya registrado.");
                     }
                 }
                 documentoEjecutivos.Close();

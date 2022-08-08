@@ -1,4 +1,5 @@
-﻿using CreditoAuto.Repository;
+﻿using CreditoAuto.Entities.Utils;
+using CreditoAuto.Repository;
 using CreditoAuto.Repository.Context;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
@@ -42,6 +43,18 @@ namespace CreditoAuto.Test.UnitTest
         public async Task CargarEjecutivos_NoDeberia_Lanzar_Error()
         {
             Assert.DoesNotThrow(() => inicializarDocumentos.CargarEjecutivos());
+        }
+
+        [Test]
+        public async Task Cargar_ClientesDuplicados_Deberia_Lanzar_ExcepcionControlada()
+        {
+            Assert.Throws<CreditoAutoException>(() => inicializarDocumentos.CargarClientes("clientesduplicados"));
+        }
+
+        [Test]
+        public async Task Cargar_ClientesDuplicados_DocumentoAbiero_Deberia_Lanzar_ExcepcionControlada()
+        {
+            Assert.Throws<CreditoAutoException>(() => inicializarDocumentos.CargarClientes());
         }
     }
 }

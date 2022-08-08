@@ -15,7 +15,8 @@ namespace CreditoAuto.Test
                 {"Documentos:clientes", string.Format(@"{0}\{1}",pathDocumentos, "clientes.csv")},
                 {"Documentos:marcas", string.Format(@"{0}\{1}",pathDocumentos, "marcas.csv")},
                 {"Documentos:patios", string.Format(@"{0}\{1}",pathDocumentos, "patios.csv")},
-                {"Documentos:ejecutivos",string.Format(@"{0}\{1}",pathDocumentos, "ejecutivos.csv")}
+                {"Documentos:ejecutivos",string.Format(@"{0}\{1}",pathDocumentos, "ejecutivos.csv")},
+                {"Documentos:clientesduplicados",string.Format(@"{0}\{1}",pathDocumentos, "clientesduplicados.csv")}
             };
 
             return new ConfigurationBuilder().AddInMemoryCollection(llavesConfiguracion).Build();

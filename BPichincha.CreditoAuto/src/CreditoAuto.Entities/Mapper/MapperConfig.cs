@@ -67,6 +67,7 @@ namespace CreditoAuto.Entities.Mapper
                  .Map(dst => dst.NombrePatio, org => org.Patio.Nombre)
                  .Map(dst => dst.NumeroPuntoVenta, org => org.Patio.NumeroPuntoVenta)
                  .Map(dst => dst.FechaAsignacion, org => string.Format("{0:dd/MM/yyyy hh:mm:ss}", org.FechaAsignacion))
+                 .Map(dst => dst.AsignacionId, org => org.AsignacionId)
                  .IgnoreNonMapped(true);
 
             config.NewConfig<SolicitudCreditoDto, SolicitudCredito>()

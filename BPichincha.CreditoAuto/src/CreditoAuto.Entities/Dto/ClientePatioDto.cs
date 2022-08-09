@@ -8,5 +8,6 @@
         public string DireccionPatio { get; set; }
         public int NumeroPuntoVenta { get; set; }
         public string FechaAsignacion { get; set; }
+        public int AsignacionId { get; set; }
     }
 }

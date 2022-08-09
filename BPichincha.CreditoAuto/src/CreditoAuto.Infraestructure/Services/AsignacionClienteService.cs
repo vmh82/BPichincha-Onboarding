@@ -30,7 +30,9 @@ namespace CreditoAuto.Infraestructure.Services
                 Response<ClientePatioDto>? asignacionClienteDto = await Consultar(clienteRequest.Identificacion, clienteRequest.NumeroPuntoVenta);
                 if (!string.IsNullOrEmpty(asignacionClienteDto.Data.Identificacion))
                 {
+                    clienteRequest.FechaAsignacion = clienteRequest.FechaAsignacion ?? DateTime.Now;
                     AsignacionCliente asignacionCliente = await _mapper.From(clienteRequest).AdaptToTypeAsync<AsignacionCliente>();
+                    asignacionCliente.AsignacionId = asignacionClienteDto.Data.AsignacionId;
                     int esFinTransaccion = await _asignacionRepo.Actualizar(asignacionCliente);
                     if (esFinTransaccion == 0)
                     {

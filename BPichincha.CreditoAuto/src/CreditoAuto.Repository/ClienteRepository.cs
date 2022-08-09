@@ -26,7 +26,7 @@ namespace CreditoAuto.Repository
 
         public async Task<Cliente> ConsultarCliente(string identificacion)
         {
-            Cliente? cliente = await _context.Clientes.AsNoTracking().Where(q => q.Identificacion.Equals(identificacion)).FirstOrDefaultAsync();
+            Cliente? cliente = await _context.Clientes.AsNoTracking().Where(q => q.Identificacion.Equals(identificacion)).Include(q=>q.AsignacionClientes).Include(q=>q.SolicitudCreditos).FirstOrDefaultAsync();
             return cliente;
         }
 

@@ -102,24 +102,18 @@ namespace CreditoAuto.Infraestructure.Services
         {
             try
             {
-                Response<ClienteDto>? clienteDto = await ConsultarCliente(identificacion);
-                if (!string.IsNullOrEmpty(clienteDto.Data.Identificacion))
+
+                Cliente cliente = await _clienteRepo.ConsultarCliente(identificacion);
+                if (null != cliente && (cliente.SolicitudCreditos.Count() > 0 || cliente.AsignacionClientes.Count() > 0))
                 {
-                    Cliente cliente = await _mapper.From(clienteDto.Data).AdaptToTypeAsync<Cliente>();
-                    int esFinTransaccion = await _clienteRepo.EliminarCliente(cliente);
-                    if (esFinTransaccion == 0)
-                    {
-                        return Response<int>.Ok(esFinTransaccion, "Ocurrio un error al eliminar el cliente");
-                    }
-                    else
-                    {
-                        return Response<int>.Ok(esFinTransaccion, "Cliente eliminado Correctamente");
-                    }
+                    return Response<int>.Error("No se puede eliminar el cliente, existe una solicitud o asignacion asociada");
                 }
-                else
+                if (null == cliente)
                 {
-                    return Response<int>.Ok(0, clienteDto.Mensaje);
+                    return Response<int>.Ok(new(), "Cliente no encontrado");
                 }
+                int esFinTransaccion = await _clienteRepo.EliminarCliente(cliente);
+                return Response<int>.Ok(esFinTransaccion, "Cliente eliminado correctamente");
             }
             catch(Exception ex)
             {

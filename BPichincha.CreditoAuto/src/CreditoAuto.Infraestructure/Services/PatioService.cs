@@ -106,7 +106,7 @@ namespace CreditoAuto.Infraestructure.Services
                 Patio patio = await _patioRepo.Consultar(numeroPuntoVenta);
                 if (null != patio && (patio.SolicitudCreditos.Count() > 0 || patio.AsignacionClientes.Count() > 0))
                 {
-                    return Response<int>.Error("No se puede eliminar el patio, una solicitud o asignacion asociada");
+                    return Response<int>.Error("No se puede eliminar el patio, existe una solicitud o asignacion asociada");
                 }
                 if (null == patio)
                 {

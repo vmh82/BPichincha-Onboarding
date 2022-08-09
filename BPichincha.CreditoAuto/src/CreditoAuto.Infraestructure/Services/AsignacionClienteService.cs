@@ -109,7 +109,7 @@ namespace CreditoAuto.Infraestructure.Services
                 Response<ClientePatioDto>? AsignacionClienteDto = await Consultar(identificacion);
                 if (!string.IsNullOrEmpty(AsignacionClienteDto.Data.Identificacion))
                 {
-                    return Response<int>.Ok(1, "Cliente eliminado Correctamente");
+                    return Response<int>.Ok(1, "asigacion eliminada correctamente");
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace CreditoAuto.Infraestructure.Services
             catch(Exception ex)
             {
                 _logger.LogError("Ocurrio un error de tipo {0}", ex);
-                return Response<int>.Error("Ocurrio un error al eliminar el cliente");
+                return Response<int>.Error("Ocurrio un error al eliminar la asigacion");
             }
         }
     }

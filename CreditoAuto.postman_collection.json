@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"identificacion\": \"1724389646\",\r\n  \"numeroPuntoVenta\": 1,\r\n  \"fechaAsignacion\": \"2022-08-04T17:21:56.380Z\"\r\n}",
+					"raw": "{\r\n  \"identificacion\": \"1724389646\",\r\n  \"numeroPuntoVenta\": 1\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -135,7 +135,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "",
+					"raw": "{\r\n  \"identificacion\": \"1724389646\",\r\n  \"numeroPuntoVenta\": 1,\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -143,7 +143,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:22947/api/asignacioncliente/consultar?Identificacion=1724389615",
+					"raw": "http://localhost:22947/api/asignacioncliente/consultar",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -157,7 +157,8 @@
 					"query": [
 						{
 							"key": "Identificacion",
-							"value": "1724389615"
+							"value": "1724389615",
+							"disabled": true
 						}
 					]
 				}
@@ -327,7 +328,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "",
+					"raw": "{\r\n  \"identificacion\": \"1724389646\",\r\n  \"numeroPuntoVenta\": 2\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -335,7 +336,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:22947/api/asignacioncliente/eliminar?Identificacion=1724389615",
+					"raw": "http://localhost:22947/api/asignacioncliente/eliminar",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -349,7 +350,8 @@
 					"query": [
 						{
 							"key": "Identificacion",
-							"value": "1724389615"
+							"value": "1724389615",
+							"disabled": true
 						}
 					]
 				}
@@ -422,6 +424,42 @@
 						{
 							"key": "marcaId",
 							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EliminarCliente",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:22947/api/cliente/eliminar?identificacion=1724389745",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "22947",
+					"path": [
+						"api",
+						"cliente",
+						"eliminar"
+					],
+					"query": [
+						{
+							"key": "identificacion",
+							"value": "1724389745"
 						}
 					]
 				}

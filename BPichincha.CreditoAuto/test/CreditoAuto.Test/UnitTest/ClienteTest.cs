@@ -1,10 +1,8 @@
-﻿
-using CreditoAuto.Entities.Models;
+﻿using CreditoAuto.Entities.Models;
 using CreditoAuto.Repository;
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
-
 namespace CreditoAuto.Test.UnitTest
 {
     public class ClienteTest : CreditoAutoBaseTest

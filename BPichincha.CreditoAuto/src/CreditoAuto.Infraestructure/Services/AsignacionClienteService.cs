@@ -23,35 +23,45 @@ namespace CreditoAuto.Infraestructure.Services
             _clienteService = clienteService;
             _patioService = patioService;
         }
-        public async Task<Response<AsignacionClienteDto>> Actualizar(AsignacionClienteDto clienteRequest)
+        public async Task<Response<ClientePatioDto>> Actualizar(AsignacionClienteDto clienteRequest)
         {
             try
             {
-                Response<ClientePatioDto>? AsignacionClienteDto = await Consultar(clienteRequest.Identificacion);
-                if (!string.IsNullOrEmpty(AsignacionClienteDto.Data.Identificacion))
+                Response<ClientePatioDto>? asignacionClienteDto = await Consultar(clienteRequest.Identificacion, clienteRequest.NumeroPuntoVenta);
+                if (!string.IsNullOrEmpty(asignacionClienteDto.Data.Identificacion))
                 {
-                    return Response<AsignacionClienteDto>.Ok(new(), "Ocurrio un error al actualizar la asignacion");
+                    AsignacionCliente asignacionCliente = await _mapper.From(clienteRequest).AdaptToTypeAsync<AsignacionCliente>();
+                    int esFinTransaccion = await _asignacionRepo.Actualizar(asignacionCliente);
+                    if (esFinTransaccion == 0)
+                    {
+                        return Response<ClientePatioDto>.Ok(new(), "Ocurrio un error al actualizar la asignacion");
+                    }
+                    else
+                    {
+                        asignacionClienteDto = await Consultar(clienteRequest.Identificacion, clienteRequest.NumeroPuntoVenta);
+                        return Response<ClientePatioDto>.Ok(asignacionClienteDto.Data, "asignacion actualizada Correctamente");
+                    }
                 }
                 else
                 {
-                    return Response<AsignacionClienteDto>.Ok(new(), AsignacionClienteDto.Mensaje);
+                    return Response<ClientePatioDto>.Ok(new(), asignacionClienteDto.Mensaje);
                 }
             }
             catch(Exception ex)
             {
                 _logger.LogError("Ocurrio un error de tipo {0}", ex);
-                return Response<AsignacionClienteDto>.Error("Ocurrio un error al actualizar el cliente");
+                return Response<ClientePatioDto>.Error("Ocurrio un error al actualizar la asignacion");
             }
         }
 
-        public async Task<Response<ClientePatioDto>> Consultar(string identificacion)
+        public async Task<Response<ClientePatioDto>> Consultar(string identificacion, int numeroPuntoVenta)
         {
             try
             {
-                AsignacionCliente cliente = await _asignacionRepo.Consultar(identificacion);
+                AsignacionCliente cliente = await _asignacionRepo.Consultar(identificacion, numeroPuntoVenta);
                 if (null == cliente)
                 {
-                    return Response<ClientePatioDto>.Ok(new(), "Cliente no encontrado");
+                    return Response<ClientePatioDto>.Ok(new(), "Asignacion no encontrada");
                 }
                 ClientePatioDto clientePatio = await _mapper.From(cliente).AdaptToTypeAsync<ClientePatioDto>();
                 return Response<ClientePatioDto>.Ok(clientePatio, "Transaccion procesada correctamente");
@@ -81,18 +91,14 @@ namespace CreditoAuto.Infraestructure.Services
                     return Response<ClientePatioDto>.Ok(new(), patioDto.Mensaje);
                 }
 
-                if (string.IsNullOrEmpty(patioDto.Data.Nombre))
-                {
-                    return Response<ClientePatioDto>.Ok(new(), patioDto.Mensaje);
-                }
-                Response<ClientePatioDto> clienteAsignacion = await Consultar(asignacionRequest.Identificacion);
+                Response<ClientePatioDto> clienteAsignacion = await Consultar(asignacionRequest.Identificacion, asignacionRequest.NumeroPuntoVenta);
                 if (!string.IsNullOrEmpty(clienteAsignacion.Data.Identificacion))
                 {
                     return Response<ClientePatioDto>.Ok(new(), "El cliente ya se encuentra asignado");
                 }
                 AsignacionCliente asignacionCliente = await _mapper.From(asignacionRequest).AdaptToTypeAsync<AsignacionCliente>();
                 int esFinTransaccion = await _asignacionRepo.Crear(asignacionCliente);
-                Response<ClientePatioDto>? clientePatio = await Consultar(asignacionRequest.Identificacion);
+                Response<ClientePatioDto>? clientePatio = await Consultar(asignacionRequest.Identificacion, asignacionRequest.NumeroPuntoVenta);
                 return Response<ClientePatioDto>.Ok(clientePatio.Data, "Cliente asignado correctamente");
             }
             catch(Exception ex)
@@ -102,14 +108,34 @@ namespace CreditoAuto.Infraestructure.Services
             }
         }
 
-        public async Task<Response<int>> Eliminar(string identificacion)
+        public async Task<Response<int>> Eliminar(string identificacion, int numeroPuntoVenta)
         {
             try
             {
-                Response<ClientePatioDto>? AsignacionClienteDto = await Consultar(identificacion);
+
+
+                Response<ClienteDto> clienteDto = await _clienteService.ConsultarCliente(identificacion);
+                Response<PatioDto> patioDto = await _patioService.Consultar(numeroPuntoVenta);
+
+                if (string.IsNullOrEmpty(clienteDto.Data.Identificacion))
+                {
+
+                    return Response<int>.Ok(new(), clienteDto.Mensaje);
+                }
+
+                if (string.IsNullOrEmpty(patioDto.Data.Nombre))
+                {
+                    return Response<int>.Ok(new(), patioDto.Mensaje);
+                }
+
+                Response<ClientePatioDto>? AsignacionClienteDto = await Consultar(identificacion, numeroPuntoVenta);
+
                 if (!string.IsNullOrEmpty(AsignacionClienteDto.Data.Identificacion))
                 {
-                    return Response<int>.Ok(1, "asigacion eliminada correctamente");
+
+                    AsignacionCliente asignacion = await _asignacionRepo.Consultar(identificacion, numeroPuntoVenta);
+                    int esFinTransaccion = await _asignacionRepo.Eliminar(asignacion);
+                    return Response<int>.Ok(esFinTransaccion, "asignacion eliminada correctamente");
                 }
                 else
                 {

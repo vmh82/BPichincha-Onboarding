@@ -4,6 +4,6 @@
     {
         public string Identificacion { get; set; }
         public int NumeroPuntoVenta { get; set; }
-        public DateTime FechaAsignacion { get; set; }
+        public DateTime? FechaAsignacion { get; set; }
     }
 }

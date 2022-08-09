@@ -20,9 +20,9 @@ namespace CreditoAuto.API.Controllers
         [Route("Consultar")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ClientePatioDto))]
-        public async Task<IActionResult> Consultar(string identificacion)
+        public async Task<IActionResult> Consultar(AsignacionClienteDto clienteDto)
         {
-            Response<ClientePatioDto> response = await _AsignacionClienteService.Consultar(identificacion);
+            Response<ClientePatioDto> response = await _AsignacionClienteService.Consultar(clienteDto.Identificacion, clienteDto.NumeroPuntoVenta);
             return StatusCode((int)response.Status, response);
         }
 
@@ -48,10 +48,10 @@ namespace CreditoAuto.API.Controllers
         [Route("Eliminar")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-        public async Task<IActionResult> Eliminar(string identificacion)
+        public async Task<IActionResult> Eliminar(AsignacionClienteDto asignacionClienteDto)
         {
 
-            Response<int> response = await _AsignacionClienteService.Eliminar(identificacion);
+            Response<int> response = await _AsignacionClienteService.Eliminar(asignacionClienteDto.Identificacion, asignacionClienteDto.NumeroPuntoVenta);
             return StatusCode((int)response.Status, response);
 
         }
@@ -60,7 +60,7 @@ namespace CreditoAuto.API.Controllers
         [HttpPut]
         [Route("Actualizar")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AsignacionClienteDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ClientePatioDto))]
         public async Task<IActionResult> Actualizar(AsignacionClienteDto AsignacionClienteDto)
         {
             if (!ModelState.IsValid)
@@ -69,7 +69,7 @@ namespace CreditoAuto.API.Controllers
             }
             else
             {
-                Response<AsignacionClienteDto> response = await _AsignacionClienteService.Actualizar(AsignacionClienteDto);
+                Response<ClientePatioDto> response = await _AsignacionClienteService.Actualizar(AsignacionClienteDto);
                 return StatusCode((int)response.Status, response);
 
             }

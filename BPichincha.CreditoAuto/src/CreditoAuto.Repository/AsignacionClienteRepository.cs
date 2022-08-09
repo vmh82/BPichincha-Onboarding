@@ -24,9 +24,9 @@ namespace CreditoAuto.Repository
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<AsignacionCliente> Consultar(string identificacion)
+        public async Task<AsignacionCliente> Consultar(string identificacion, int numeroPuntoVenta)
         {
-            AsignacionCliente? cliente = await _context.AsignacionClientes.AsNoTracking().Where(q => q.Identificacion.Equals(identificacion)).Include(q => q.Cliente).Include(q => q.Patio).FirstOrDefaultAsync();
+            AsignacionCliente? cliente = await _context.AsignacionClientes.AsNoTracking().Where(q => q.Identificacion.Equals(identificacion) && q.NumeroPuntoVenta.Equals(numeroPuntoVenta)).Include(q => q.Cliente).Include(q => q.Patio).FirstOrDefaultAsync();
             return cliente;
         }
 
